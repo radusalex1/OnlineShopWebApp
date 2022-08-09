@@ -28,6 +28,7 @@ namespace OnlineShopWebApp.Repositories
             }
 
             _shopContext.Clients.Remove(result);
+
             await _shopContext.SaveChangesAsync();
 
             return true;

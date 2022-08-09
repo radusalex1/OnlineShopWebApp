@@ -44,7 +44,7 @@ namespace OnlineShopWebApp.Controllers
         // GET: Clients/Create
         public IActionResult Create()
         {
-            ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "Id");
+            ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace OnlineShopWebApp.Controllers
                 await _clientRepository.Add(client);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "Id", client.Gender);
+            ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
             return View(client);
         }
 
@@ -77,7 +77,7 @@ namespace OnlineShopWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["GenderType"] = new SelectList(_genderRepository.GetAll().Result, "Id", "Id", client.Gender);
+            ViewData["GenderType"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
             return View(client);
         }
 
@@ -110,7 +110,7 @@ namespace OnlineShopWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "Id", client.Gender);
+            ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
             return View(client);
         }
 
