@@ -16,7 +16,7 @@ namespace OnlineShopWebApp.DataModels
         public double? TotalAmount { get; set; }
         public double? Discount { get; set; }
 
-        public virtual Client Client { get; set; } = null!;
+        public virtual Client? Client { get; set; } = null!;
         public virtual ICollection<OrderedProduct> OrderedProducts { get; set; }
     }
 }
