@@ -16,10 +16,13 @@ builder.Services.AddDbContext<ShopContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddTransient<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<IGenderRepository, GenderRepository>();
+builder.Services.AddTransient<IStorageRepository, StorageRepository>();
+builder.Services.AddTransient<IOrdersProductRepository, OrdersProductRepository>();
 
 var app = builder.Build();
 
