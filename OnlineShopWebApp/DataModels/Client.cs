@@ -7,7 +7,7 @@ namespace OnlineShopWebApp.DataModels
     {
         public Client()
         {
-            Orders = new HashSet<Order>();
+            Orders = new HashSet<Order>();   
         }
 
         public int Id { get; set; }
@@ -18,7 +18,7 @@ namespace OnlineShopWebApp.DataModels
         public string? PhoneNumber { get; set; }
         public int GenderId { get; set; }
 
-        public virtual Gender Gender { get; set; } = null!;
+        public virtual Gender? Gender { get; set; } 
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

@@ -18,6 +18,8 @@ builder.Services.AddDbContext<ShopContext>(options =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
+builder.Services.AddTransient<IClientRepository, ClientRepository>();
+builder.Services.AddTransient<IGenderRepository, GenderRepository>();
 
 var app = builder.Build();
 
