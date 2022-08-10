@@ -47,6 +47,16 @@ namespace OnlineShopWebApp.Repositories
             return await _shopContext.OrderedProducts.Include(c => c.Product).Include(o => o.Order).ToListAsync();
         }
 
+        public async Task<List<Product>> GetProductsForOrder(int orderId)
+        {
+            var result = await _shopContext.OrderedProducts
+                .Include(p => p.Product)
+                .Where(val => val.OrderId == orderId)
+                .Select(val=>val.Product)
+                .ToListAsync();
+          
+            return result;
+        }
 
         public bool IfExists(int id)
         {

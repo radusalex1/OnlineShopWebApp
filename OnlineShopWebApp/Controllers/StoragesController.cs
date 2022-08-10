@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineShopWebApp.DataModels;
@@ -22,13 +18,11 @@ namespace OnlineShopWebApp.Controllers
             _productRepository = productRepository;
         }
 
-
         // GET: Storages
         public async Task<IActionResult> Index()
         {
             return View(await _storageRepository.GetAll());
         }
-
 
         // GET: Storages/Details/5
         public async Task<IActionResult> Details(int? id)
