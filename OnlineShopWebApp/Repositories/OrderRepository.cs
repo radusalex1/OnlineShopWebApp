@@ -9,6 +9,7 @@ namespace OnlineShopWebApp.Repositories
         {
         }
 
+
         public async Task<bool> Add(Order objectToAdd)
         {
             await _shopContext.Orders.AddAsync(objectToAdd); 
@@ -17,6 +18,7 @@ namespace OnlineShopWebApp.Repositories
 
             return true;
         }
+
 
         public async Task<bool> Delete(int? id)
         {
@@ -34,6 +36,7 @@ namespace OnlineShopWebApp.Repositories
             return true;
         }
 
+
         public async Task<Order?> Get(int? id)
         {
             return await _shopContext.Orders
@@ -41,6 +44,7 @@ namespace OnlineShopWebApp.Repositories
                 .ThenInclude(c => c.Gender)
                 .FirstOrDefaultAsync(val => val.Id == id);
         }
+
 
         public async Task<List<Order>> GetAll()
         {
@@ -50,10 +54,12 @@ namespace OnlineShopWebApp.Repositories
                  .ToListAsync();
         }
 
+
         public bool IfExists(int id)
         {
             return _shopContext.Orders.Any(p => p.Id == id);
         }
+
 
         public async Task<bool> Update(Order objectToUpdate)
         {

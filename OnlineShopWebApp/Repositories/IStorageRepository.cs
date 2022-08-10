@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp.Repositories
 {
-    public interface IStorageRepository :IBaseOperations<Storage>
+    public interface IStorageRepository : IBaseOperations<Storage>
     {
     }
 }

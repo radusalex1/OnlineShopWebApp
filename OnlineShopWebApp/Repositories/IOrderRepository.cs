@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp.Repositories
 {
-    public interface IOrderRepository:IBaseOperations<Order>
+    public interface IOrderRepository : IBaseOperations<Order>
     {
 
     }
