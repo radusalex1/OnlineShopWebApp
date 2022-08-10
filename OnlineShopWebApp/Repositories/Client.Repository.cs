@@ -18,6 +18,7 @@ namespace OnlineShopWebApp.Repositories
             return true;
         }
 
+
         public async Task<bool> Delete(int? id)
         {
             var result = await _shopContext.Clients.FindAsync(id);
@@ -34,24 +35,28 @@ namespace OnlineShopWebApp.Repositories
             return true;
         }
 
+
         public async Task<Client?> Get(int? id)
         {
             return await _shopContext.Clients.Include(c => c.Gender).FirstOrDefaultAsync(val => val.Id == id);
         }
+
 
         public async Task<List<Client>> GetAll()
         {
             return await _shopContext.Clients.Include(c => c.Gender).ToListAsync();
         }
 
+
         public bool IfExists(int id)
         {
             return _shopContext.Clients.Any(e => e.Id == id);
         }
 
+
         public async Task<bool> Update(Client objectToUpdate)
         {
-            var result = _shopContext.Clients.Update(objectToUpdate);
+            _ = _shopContext.Clients.Update(objectToUpdate);
             await _shopContext.SaveChangesAsync();
 
             return true;
