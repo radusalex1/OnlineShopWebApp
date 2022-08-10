@@ -38,23 +38,31 @@ namespace OnlineShopWebApp.Repositories
 
         public async Task<OrderedProduct?> Get(int? id)
         {
-            return await _shopContext.OrderedProducts.Include(p=> p.Product).Include(o => o.Order).ThenInclude(c => c.Client).FirstOrDefaultAsync(val => val.Id == id);
+            return await _shopContext.OrderedProducts
+                .Include(p => p.Product)
+                .Include(o => o.Order)
+                .ThenInclude(c => c.Client)
+                .FirstOrDefaultAsync(val => val.Id == id);
         }
 
 
         public async Task<List<OrderedProduct>> GetAll()
         {
-            return await _shopContext.OrderedProducts.Include(c => c.Product).Include(o => o.Order).ThenInclude(c => c.Client).ToListAsync();
+            return await _shopContext.OrderedProducts
+                .Include(c => c.Product)
+                .Include(o => o.Order)
+                .ThenInclude(c => c.Client)
+                .ToListAsync();
         }
 
-        public async Task<List<Product>> GetProductsForOrder(int orderId)
+        public async Task<List<Product?>> GetProductsForOrder(int orderId)
         {
             var result = await _shopContext.OrderedProducts
                 .Include(p => p.Product)
                 .Where(val => val.OrderId == orderId)
-                .Select(val=>val.Product)
+                .Select(val => val.Product)
                 .ToListAsync();
-          
+
             return result;
         }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace OnlineShopWebApp.DataModels
+﻿namespace OnlineShopWebApp.DataModels
 {
     public partial class OrderedProduct
     {

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.Repositories;
 
-namespace OnlineShopWebApp.Controllers
+namespace OnlineShopWebApp.Controllers.APIControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersProductControllerApi:ControllerBase
+    public class OrdersProductControllerApi : ControllerBase
     {
         public readonly IOrdersProductRepository _ordersProductRepository;
 

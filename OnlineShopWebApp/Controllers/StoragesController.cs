@@ -56,11 +56,12 @@ namespace OnlineShopWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProductId,Quantity")] Storage storage)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && storage.Quantity >= 0)
             {
                 await _storageRepository.Add(storage);
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", storage.Product);
             return View(storage);
         }
@@ -94,7 +95,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && storage.Quantity >= 0)
             {
                 try
                 {
