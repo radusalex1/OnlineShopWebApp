@@ -13,6 +13,7 @@ namespace OnlineShopWebApp.Repositories
         public async Task<bool> Add(OrderedProduct objectToAdd)
         {
             await _shopContext.OrderedProducts.AddAsync(objectToAdd);
+
             await _shopContext.SaveChangesAsync();
 
             return true;
@@ -64,6 +65,19 @@ namespace OnlineShopWebApp.Repositories
                 .ToListAsync();
 
             return result;
+        }
+
+        public async Task<List<OrderedProduct>> GetProductsWithQuantityFromOrder(int orderId)
+        {
+            return await  _shopContext.OrderedProducts.Where(val => val.OrderId == orderId).ToListAsync();
+        }
+
+        public async Task<int> GetQuantityForProductFromOrder(int orderId, int productId)
+        {
+            var result = await _shopContext.OrderedProducts
+                .AsNoTracking()
+                .FirstOrDefaultAsync(val => val.OrderId == orderId && val.ProductId == productId);
+            return result.Quantity;
         }
 
         public bool IfExists(int id)
