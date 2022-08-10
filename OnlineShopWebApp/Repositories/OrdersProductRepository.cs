@@ -71,10 +71,15 @@ namespace OnlineShopWebApp.Repositories
             return _shopContext.OrderedProducts.Any(e => e.Id == id);
         }
 
+        public async Task<bool> IfExists(int entityId,int orderId, int productId)
+        {
+            return await _shopContext.OrderedProducts.AnyAsync(val=>val.OrderId == orderId && val.ProductId==productId && val.Id!=entityId);
+        }
 
         public async Task<bool> Update(OrderedProduct objectToUpdate)
         {
-            _ = _shopContext.OrderedProducts.Update(objectToUpdate);
+             _shopContext.OrderedProducts.Update(objectToUpdate);
+
             await _shopContext.SaveChangesAsync();
 
             return true;

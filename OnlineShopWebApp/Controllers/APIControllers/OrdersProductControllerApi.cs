@@ -19,5 +19,11 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         {
             return Ok(await _ordersProductRepository.GetProductsForOrder(orderId));
         }
+
+        [HttpPost("AddProdutsToOrder")]
+        public async Task<IActionResult> AddProductToOrder(int orderId,List<int> produtIds)
+        {
+            return Ok();
+        }
     }
 }
