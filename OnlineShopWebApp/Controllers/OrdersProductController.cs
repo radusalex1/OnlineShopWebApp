@@ -11,13 +11,15 @@ namespace OnlineShopWebApp.Controllers
         private readonly IOrdersProductRepository _orderProductRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IStorageRepository _storageRepository;
 
 
-        public OrdersProductController(IOrdersProductRepository ordersProductRepository, IOrderRepository orderRepository, IProductRepository productRepository)
+        public OrdersProductController(IOrdersProductRepository ordersProductRepository, IOrderRepository orderRepository, IProductRepository productRepository, IStorageRepository storageRepository)
         {
             _orderProductRepository = ordersProductRepository;
             _orderRepository = orderRepository;
             _productRepository = productRepository;
+            _storageRepository = storageRepository;
         }
 
 
@@ -50,7 +52,7 @@ namespace OnlineShopWebApp.Controllers
         // GET: OrderedProducts/Create
         public IActionResult Create()
         {
-            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Client.Name");
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Id");
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name");
             return View();
         }
@@ -59,16 +61,21 @@ namespace OnlineShopWebApp.Controllers
         // POST: OrderedProducts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OrderId,ProductId")] OrderedProduct orderedProduct)
+        public async Task<IActionResult> Create([Bind("Id,OrderId,ProductId,Quantity")] OrderedProduct orderedProduct)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && orderedProduct.Quantity > 0 && await _orderProductRepository.IfExists(0, orderedProduct.OrderId, orderedProduct.ProductId) == false)
             {
                 await _orderProductRepository.Add(orderedProduct);
+
+                await _storageRepository.DecreaseQuantity(orderedProduct.ProductId, orderedProduct.Quantity);
+
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Client.Name", orderedProduct.Order);
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Id", orderedProduct.Order);
+
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", orderedProduct.Product);
+
             return View(orderedProduct);
         }
 
@@ -88,7 +95,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
 
-            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Client.Name");
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Id");
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name");
             return View(orderedProduct);
         }
@@ -97,18 +104,39 @@ namespace OnlineShopWebApp.Controllers
         // POST: OrderedProducts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,ProductId")] OrderedProduct orderedProduct)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,ProductId,Quantity")] OrderedProduct orderedProduct)
         {
             if (id != orderedProduct.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && orderedProduct.Quantity > 0)
             {
                 try
                 {
-                    await _orderProductRepository.Update(orderedProduct);
+                    if (await _orderProductRepository.IfExists(id, orderedProduct.OrderId, orderedProduct.ProductId) == false)
+                    {
+                        var oldQuantity = await _orderProductRepository.GetQuantityForProductFromOrder(orderedProduct.OrderId, orderedProduct.ProductId);
+
+                        if (oldQuantity < orderedProduct.Quantity)
+                        {
+                            await _storageRepository.DecreaseQuantity(orderedProduct.ProductId, orderedProduct.Quantity - oldQuantity);
+                        }
+                        else
+                        {
+                           await _storageRepository.IncreaseQuantity(orderedProduct.ProductId, oldQuantity - orderedProduct.Quantity);
+                        }
+
+                        await _orderProductRepository.Update(orderedProduct);
+
+                    }
+                    else
+                    {
+                        ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Id", orderedProduct.Order);
+                        ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", orderedProduct.Product);
+                        return View(orderedProduct);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,7 +151,7 @@ namespace OnlineShopWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Client.Name", orderedProduct.Order);
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Id", orderedProduct.Order);
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", orderedProduct.Product);
             return View(orderedProduct);
         }
@@ -162,6 +190,8 @@ namespace OnlineShopWebApp.Controllers
 
             if (orderedProduct != null)
             {
+                await _storageRepository.IncreaseQuantity(orderedProduct.ProductId, orderedProduct.Quantity);
+
                 await _orderProductRepository.Delete(id);
             }
 

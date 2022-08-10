@@ -15,6 +15,7 @@ namespace OnlineShopWebApp.DataModels
         public DateTime Created { get; set; }
         public double? TotalAmount { get; set; }
         public double? Discount { get; set; }
+        public bool Canceled { get; set; }
 
         public virtual Client? Client { get; set; } = null!;
         public virtual ICollection<OrderedProduct> OrderedProducts { get; set; }
