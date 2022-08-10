@@ -7,6 +7,7 @@ namespace OnlineShopWebApp.Repositories
     {
         public OrderRepository(ShopContext shopContext) : base(shopContext)
         {
+
         }
 
 

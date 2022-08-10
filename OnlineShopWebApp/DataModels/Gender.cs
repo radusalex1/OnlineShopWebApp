@@ -11,8 +11,7 @@ namespace OnlineShopWebApp.DataModels
         }
 
         public int Id { get; set; }
-
-        public string? GenderType { get; set; } = null!;
+        public string GenderType { get; set; } = null!;
 
         public virtual ICollection<Client> Clients { get; set; }
     }

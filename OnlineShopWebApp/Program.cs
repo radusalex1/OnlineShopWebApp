@@ -3,13 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using OnlineShopWebApp.DataModels;
 using OnlineShopWebApp.Repositories;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
-
 builder.Services.AddMvc();
 
 builder.Services.AddControllersWithViews();
@@ -45,11 +42,6 @@ builder.Services.AddSwaggerGen(c =>
             //Url = new Uri("https://example.com/license"),
         }
     });
-
-    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-    //c.IncludeXmlComments(xmlPath);
 
     c.TagActionsBy(api =>
     {

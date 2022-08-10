@@ -23,6 +23,7 @@ namespace OnlineShopWebApp.DataModels
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Storage> Storages { get; set; } = null!;
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>(entity =>
