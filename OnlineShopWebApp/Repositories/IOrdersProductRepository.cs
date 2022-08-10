@@ -2,8 +2,7 @@
 
 namespace OnlineShopWebApp.Repositories
 {
-    public interface IProductRepository : IBaseOperations<Product>
+    public interface IOrdersProductRepository : IBaseOperations<OrderedProduct>
     {
-
     }
 }

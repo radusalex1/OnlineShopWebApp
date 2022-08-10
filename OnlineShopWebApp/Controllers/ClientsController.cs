@@ -11,17 +11,20 @@ namespace OnlineShopWebApp.Controllers
         private readonly IClientRepository _clientRepository;
         private readonly IGenderRepository _genderRepository;
 
+
         public ClientsController(IClientRepository repo, IGenderRepository genderRepository)
         {
             _clientRepository = repo;
             _genderRepository = genderRepository;
         }
 
+
         // GET: Clients
         public async Task<IActionResult> Index()
         {
             return View(await _clientRepository.GetAll());
         }
+
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -41,12 +44,14 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
+
         // GET: Clients/Create
         public IActionResult Create()
         {
             ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType");
             return View();
         }
+
 
         // POST: Clients/Create
         [HttpPost]
@@ -62,6 +67,7 @@ namespace OnlineShopWebApp.Controllers
             ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
             return View(client);
         }
+
 
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -80,6 +86,7 @@ namespace OnlineShopWebApp.Controllers
             ViewData["GenderType"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
             return View(client);
         }
+
 
         // POST: Clients/Edit/5
         [HttpPost]
@@ -139,12 +146,13 @@ namespace OnlineShopWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //    if (_clientRepository.GetAll() == null)
-            //    {
-            //        return Problem("Entity set 'ShopContext.Clients'  is null.");
-            //    }
+            if (await _clientRepository.GetAll() == null)
+            {
+                return Problem("Entity set 'ShopContext.Clients' is null.");
+            }
 
             var client = await _clientRepository.Get(id);
+
             if (client != null)
             {
                 await _clientRepository.Delete(client.Id);

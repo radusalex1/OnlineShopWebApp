@@ -1,0 +1,177 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using OnlineShopWebApp.DataModels;
+using OnlineShopWebApp.Repositories;
+
+namespace OnlineShopWebApp.Controllers
+{
+    public class OrdersProductController : Controller
+    {
+        private readonly IOrdersProductRepository _orderProductRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IProductRepository _productRepository;
+
+
+        public OrdersProductController(IOrdersProductRepository ordersProductRepository, IOrderRepository orderRepository, IProductRepository productRepository)
+        {
+            _orderProductRepository = ordersProductRepository;
+            _orderRepository = orderRepository;
+            _productRepository = productRepository;
+        }
+
+
+        // GET: OrderedProducts
+        public async Task<IActionResult> Index()
+        {
+            return View(await _orderProductRepository.GetAll());
+        }
+
+
+        // GET: OrderedProducts/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var orderedProduct = await _orderProductRepository.Get(id);
+
+            if (orderedProduct == null)
+            {
+                return NotFound();
+            }
+
+            return View(orderedProduct);
+        }
+
+
+        // GET: OrderedProducts/Create
+        public IActionResult Create()
+        {
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Client.Name");
+            ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name");
+            return View();
+        }
+
+
+        // POST: OrderedProducts/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,OrderId,ProductId")] OrderedProduct orderedProduct)
+        {
+            if (ModelState.IsValid)
+            {
+                await _orderProductRepository.Add(orderedProduct);
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Client.Name", orderedProduct.Order);
+            ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", orderedProduct.Product);
+            return View(orderedProduct);
+        }
+
+
+        // GET: OrderedProducts/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var orderedProduct = await _orderProductRepository.Get(id);
+
+            if (orderedProduct == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Client.Name");
+            ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name");
+            return View(orderedProduct);
+        }
+
+
+        // POST: OrderedProducts/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,ProductId")] OrderedProduct orderedProduct)
+        {
+            if (id != orderedProduct.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _orderProductRepository.Update(orderedProduct);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OrderedProductExists(orderedProduct.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Client.Name", orderedProduct.Order);
+            ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", orderedProduct.Product);
+            return View(orderedProduct);
+        }
+
+
+        // GET: OrderedProducts/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var orderedProduct = await _orderProductRepository.Get(id);
+
+            if (orderedProduct == null)
+            {
+                return NotFound();
+            }
+
+            return View(orderedProduct);
+        }
+
+
+        // POST: OrderedProducts/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (await _orderProductRepository.GetAll() == null)
+            {
+                return Problem("Entity set 'ShopContext.OrderedProducts'  is null.");
+            }
+
+            var orderedProduct = await _orderProductRepository.Get(id);
+
+            if (orderedProduct != null)
+            {
+                await _orderProductRepository.Delete(id);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        private bool OrderedProductExists(int id)
+        {
+            return _orderProductRepository.IfExists(id);
+        }
+    }
+}
