@@ -56,7 +56,7 @@ namespace OnlineShopWebApp.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Product?>> GetProductsForOrder(int orderId)
+        public async Task<List<Product?>> GetProductsFromOrder(int orderId)
         {
             var result = await _shopContext.OrderedProducts
                 .Include(p => p.Product)
@@ -77,6 +77,7 @@ namespace OnlineShopWebApp.Repositories
             var result = await _shopContext.OrderedProducts
                 .AsNoTracking()
                 .FirstOrDefaultAsync(val => val.OrderId == orderId && val.ProductId == productId);
+
             return result.Quantity;
         }
 

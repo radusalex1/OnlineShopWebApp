@@ -17,7 +17,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         [HttpGet("GetProductsByOrder")]
         public async Task<IActionResult> GetProductsByOrder(int orderId)
         {
-            return Ok(await _ordersProductRepository.GetProductsForOrder(orderId));
+            return Ok(await _ordersProductRepository.GetProductsFromOrder(orderId));
         }
 
         [HttpPost("AddProdutsToOrder")]

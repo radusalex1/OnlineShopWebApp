@@ -2,14 +2,34 @@
 
 namespace OnlineShopWebApp.Repositories
 {
+
+    /// <summary>
+    /// TODO: maybe change theese names.
+    /// </summary>
     public interface IOrdersProductRepository : IBaseOperations<OrderedProduct>
     {
-        public Task<List<Product?>> GetProductsForOrder(int orderId);
+        /// <summary>
+        /// Return all the products from an Order;
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public Task<List<Product?>> GetProductsFromOrder(int orderId);
 
-        public Task<bool> IfExists(int entityId,int orderId, int productId);
-
+        /// <summary>
+        /// Returns a list of OrderedProducts by Order Id.
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public Task<List<OrderedProduct>> GetProductsWithQuantityFromOrder(int orderId);
 
-        public Task<int> GetQuantityForProductFromOrder(int orderId,int productId);
+        /// <summary>
+        /// Returns the quantity of a Product from an Order.
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public Task<int> GetQuantityForProductFromOrder(int orderId, int productId);
+
+        public Task<bool> IfExists(int entityId, int orderId, int productId);
     }
 }
