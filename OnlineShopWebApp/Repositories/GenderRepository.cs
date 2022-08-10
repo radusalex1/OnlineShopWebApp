@@ -9,10 +9,12 @@ namespace OnlineShopWebApp.Repositories
         {
         }
 
+
         public async Task<Gender?> Get(int? id)
         {
             return await _shopContext.Genders.FirstOrDefaultAsync(val => val.Id == id);
         }
+
 
         public async Task<List<Gender>> GetAll()
         {

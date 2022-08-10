@@ -10,6 +10,8 @@ namespace OnlineShopWebApp.Controllers
     {
         public readonly IOrderRepository _orderRepository;
         public readonly IClientRepository _clientRepository;
+
+
         public OrdersController(IOrderRepository orderRepository, IClientRepository clientRepository)
         {
             _orderRepository = orderRepository;
@@ -23,6 +25,7 @@ namespace OnlineShopWebApp.Controllers
             var orders = await _orderRepository.GetAll();
             return View(orders);
         }
+
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -41,6 +44,7 @@ namespace OnlineShopWebApp.Controllers
             return View(order);
         }
 
+
         // GET: Orders/Create
         public async Task<IActionResult> Create()
         {
@@ -48,9 +52,8 @@ namespace OnlineShopWebApp.Controllers
             return View();
         }
 
+
         // POST: Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ClientId,Created,TotalAmount,Discount")] Order order)
@@ -65,6 +68,7 @@ namespace OnlineShopWebApp.Controllers
             ViewData["ClientId"] = new SelectList(await _clientRepository.GetAll(), "Id", "Name", order.ClientId);
             return View(order);
         }
+
 
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -86,9 +90,8 @@ namespace OnlineShopWebApp.Controllers
             return View(order);
         }
 
+
         // POST: Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ClientId,Created,TotalAmount,Discount")] Order order)
@@ -121,6 +124,7 @@ namespace OnlineShopWebApp.Controllers
             return View(order);
         }
 
+
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -139,6 +143,7 @@ namespace OnlineShopWebApp.Controllers
             return View(order);
         }
 
+
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -153,6 +158,7 @@ namespace OnlineShopWebApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool OrderExists(int id)
         {

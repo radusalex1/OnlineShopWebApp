@@ -7,11 +7,33 @@ namespace OnlineShopWebApp.Repositories
     {
         public OrderRepository(ShopContext shopContext) : base(shopContext)
         {
+
         }
+
 
         public async Task<bool> Add(Order objectToAdd)
         {
             await _shopContext.Orders.AddAsync(objectToAdd); 
+
+            await _shopContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> CancelOrderById(int orderId)
+        {
+           
+            var order =  await _shopContext.Orders
+               .Include(val => val.Client)
+               .ThenInclude(c => c.Gender)
+               .FirstOrDefaultAsync(val => val.Id == orderId);
+
+            if(order == null)
+            {
+                return false;
+            }
+
+            _shopContext.Orders.Update(order);
 
             await _shopContext.SaveChangesAsync();
 
@@ -34,6 +56,7 @@ namespace OnlineShopWebApp.Repositories
             return true;
         }
 
+
         public async Task<Order?> Get(int? id)
         {
             return await _shopContext.Orders
@@ -41,6 +64,7 @@ namespace OnlineShopWebApp.Repositories
                 .ThenInclude(c => c.Gender)
                 .FirstOrDefaultAsync(val => val.Id == id);
         }
+
 
         public async Task<List<Order>> GetAll()
         {
@@ -50,10 +74,18 @@ namespace OnlineShopWebApp.Repositories
                  .ToListAsync();
         }
 
+        public async Task<List<Order>> GetOrdersByClientId(int clientId)
+        {
+            return await _shopContext.Orders
+                .Where(c=>c.ClientId==clientId)
+                .ToListAsync();
+        }
+
         public bool IfExists(int id)
         {
             return _shopContext.Orders.Any(p => p.Id == id);
         }
+
 
         public async Task<bool> Update(Order objectToUpdate)
         {

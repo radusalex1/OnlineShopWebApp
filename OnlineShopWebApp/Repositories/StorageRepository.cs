@@ -47,6 +47,19 @@ namespace OnlineShopWebApp.Repositories
             return await _shopContext.Storages.Include(c => c.Product).ToListAsync();
         }
 
+        public async Task<int> GetQuantityByProductId(int productId)
+        {
+            var product = await _shopContext.Storages.FirstOrDefaultAsync(p => p.ProductId == productId);
+          
+            if(product==null)
+            {
+                return 0;
+            }
+            else
+            {
+                return product.Quantity;
+            }
+        }
 
         public bool IfExists(int id)
         {

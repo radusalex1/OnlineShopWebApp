@@ -18,6 +18,7 @@ namespace OnlineShopWebApp.Controllers
             _genderRepository = genderRepository;
         }
 
+
         // GET: Clients
         public async Task<IActionResult> Index()
         {
@@ -145,10 +146,10 @@ namespace OnlineShopWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //    if (_clientRepository.GetAll() == null)
-            //    {
-            //        return Problem("Entity set 'ShopContext.Clients'  is null.");
-            //    }
+            if (await _clientRepository.GetAll() == null)
+            {
+                return Problem("Entity set 'ShopContext.Clients' is null.");
+            }
 
             var client = await _clientRepository.Get(id);
 

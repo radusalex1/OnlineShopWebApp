@@ -1,4 +1,6 @@
-﻿namespace OnlineShopWebApp.Repositories
+﻿
+
+namespace OnlineShopWebApp.Repositories
 {
     public interface IBaseOperations <T>
     {
