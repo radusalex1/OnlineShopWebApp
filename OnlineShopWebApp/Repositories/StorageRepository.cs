@@ -59,8 +59,8 @@ namespace OnlineShopWebApp.Repositories
         public async Task<int> GetQuantityByProductId(int productId)
         {
             var product = await _shopContext.Storages.FirstOrDefaultAsync(p => p.ProductId == productId);
-          
-            if(product==null)
+
+            if (product == null)
             {
                 return 0;
             }

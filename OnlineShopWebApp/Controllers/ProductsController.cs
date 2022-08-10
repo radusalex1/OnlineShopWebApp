@@ -5,23 +5,23 @@ using OnlineShopWebApp.Repositories;
 
 namespace OnlineShopWebApp.Controllers
 {
+    /// <summary>
+    /// TODO: 2 produse sa nu aiba acelas nume;
+    /// </summary>
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
-
 
         public ProductsController(ShopContext context, IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
 
-
         // GET: Products
         public async Task<IActionResult> Index()
         {
             return View(await _productRepository.GetAll());
         }
-
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -41,13 +41,11 @@ namespace OnlineShopWebApp.Controllers
             return View(product);
         }
 
-
         // GET: Products/Create
         public IActionResult Create()
         {
             return View();
         }
-
 
         // POST: Products/Create
         [HttpPost]
@@ -146,7 +144,6 @@ namespace OnlineShopWebApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
 
         private bool ProductExists(int id)
         {

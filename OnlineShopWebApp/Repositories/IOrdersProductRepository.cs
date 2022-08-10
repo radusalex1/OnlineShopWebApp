@@ -2,7 +2,6 @@
 
 namespace OnlineShopWebApp.Repositories
 {
-
     /// <summary>
     /// TODO: maybe change theese names.
     /// </summary>

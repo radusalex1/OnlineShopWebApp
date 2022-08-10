@@ -13,9 +13,9 @@ namespace OnlineShopWebApp.Controllers
         public readonly IOrdersProductRepository _ordersProductRepository;
         public readonly IStorageRepository _storageRepository;
 
-        public OrdersController(IOrderRepository orderRepository, 
+        public OrdersController(IOrderRepository orderRepository,
             IClientRepository clientRepository,
-            IOrdersProductRepository ordersProductRepository, 
+            IOrdersProductRepository ordersProductRepository,
             IStorageRepository storageRepository)
         {
             _orderRepository = orderRepository;
