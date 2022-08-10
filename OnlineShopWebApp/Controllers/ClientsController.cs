@@ -6,6 +6,9 @@ using OnlineShopWebApp.Repositories;
 
 namespace OnlineShopWebApp.Controllers
 {
+    /// <summary>
+    /// TODO: 2 clienti sa nu aiba acelas numarul de telefon.
+    /// </summary>
     public class ClientsController : Controller
     {
         private readonly IClientRepository _clientRepository;
