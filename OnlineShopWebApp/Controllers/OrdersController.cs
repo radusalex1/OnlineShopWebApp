@@ -62,7 +62,7 @@ namespace OnlineShopWebApp.Controllers
         // POST: Orders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ClientId,Created,TotalAmount,Discount")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,ClientId,Created,TotalAmount")] Order order)
         {
             order.Client = await _clientRepository.Get(order.ClientId);
 
@@ -71,6 +71,7 @@ namespace OnlineShopWebApp.Controllers
                 await _orderRepository.Add(order);
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ClientId"] = new SelectList(await _clientRepository.GetAll(), "Id", "Name", order.ClientId);
             return View(order);
         }
@@ -100,7 +101,7 @@ namespace OnlineShopWebApp.Controllers
         // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ClientId,Created,TotalAmount,Discount")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ClientId,Created,TotalAmount")] Order order)
         {
             if (id != order.Id)
             {

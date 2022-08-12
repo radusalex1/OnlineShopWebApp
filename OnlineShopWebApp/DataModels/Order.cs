@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace OnlineShopWebApp.DataModels
+﻿namespace OnlineShopWebApp.DataModels
 {
     public partial class Order
     {
@@ -14,7 +11,6 @@ namespace OnlineShopWebApp.DataModels
         public int ClientId { get; set; }
         public DateTime Created { get; set; }
         public double? TotalAmount { get; set; }
-        public double? Discount { get; set; }
         public bool Canceled { get; set; }
 
         public virtual Client? Client { get; set; } = null!;
