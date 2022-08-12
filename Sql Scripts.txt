@@ -1,0 +1,101 @@
+drop trigger UpdateOrdersTotalAmount
+create TRIGGER UpdateOrdersTotalAmount on [dbo].[Products]
+after  UPDATE
+AS DECLARE
+    @OldPrice float,
+    @NewPrice float,
+    @id int;
+
+Select @OldPrice = Price from deleted
+Select @NewPrice = Price from inserted
+Select @id = Id from deleted
+
+BEGIN
+   if UPDATE(Price)
+   BEGIN
+     UPDATE Orders
+        SET TotalAmount = TotalAmount + (@NewPrice - @OldPrice) * (select op.Quantity from OrderedProducts op where op.ProductId=@id)
+        where Id in
+        (
+            Select op.OrderId from OrderedProducts op
+            where op.ProductId = @id
+        )
+   END
+END
+
+====================
+
+drop trigger UpdateOrdersTotalAmountWithNewProduct
+create trigger UpdateOrdersTotalAmountWithNewProduct on OrderedProducts
+after INSERT
+as declare
+@Price float,
+@quantity int,
+@orderId int,
+@productId int
+
+select @quantity  = Quantity from inserted
+select @orderId   =  OrderId from inserted
+select @productId =  ProductId from inserted
+select @Price = @quantity * (select p.Price from Products p where p.Id = @productId)
+
+BEGIN
+	 
+     UPDATE Orders
+     SET TotalAmount = TotalAmount + @Price
+     where Id in
+        (
+            Select op.OrderId from OrderedProducts op
+            where op.OrderId = @orderId
+		)
+END
+
+==========================================
+
+select * from Products
+select * from OrderedProducts
+select * from Orders
+
+update Products 
+set Price=2000
+where id=16
+
+update Orders
+set TotalAmount=2000
+
+delete from OrderedProducts
+where Id=44
+
+delete from Products
+where id=20
+
+insert into Products (Name,Price,ExpirationDate)
+values ('Calculator',2000,'2022-04-04')
+
+insert into OrderedProducts (OrderId,ProductId,Quantity) 
+values (22,20,1)
+
+====================
+drop trigger UpdateOrdersTotalAmountOnDeleteProduct
+create TRIGGER UpdateOrdersTotalAmountOnDeleteProduct on [dbo].[Products]
+instead of Delete
+AS DECLARE
+    @OldPrice float,
+	@Quantity int,
+    @id int;
+
+Select @OldPrice = Price from deleted
+Select @id = Id from deleted
+select @Quantity = op.Quantity from OrderedProducts op where op.ProductId=@id
+
+BEGIN
+     UPDATE Orders
+        SET TotalAmount = TotalAmount - @OldPrice * @Quantity
+        where Id in
+        (
+            Select op.OrderId from OrderedProducts op
+            where op.ProductId = @id
+        )
+	delete from Products
+	where id = @id
+END

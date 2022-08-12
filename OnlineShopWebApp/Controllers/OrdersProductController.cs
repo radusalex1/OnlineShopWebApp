@@ -13,7 +13,6 @@ namespace OnlineShopWebApp.Controllers
         private readonly IProductRepository _productRepository;
         private readonly IStorageRepository _storageRepository;
 
-
         public OrdersProductController(IOrdersProductRepository ordersProductRepository, IOrderRepository orderRepository, IProductRepository productRepository, IStorageRepository storageRepository)
         {
             _orderProductRepository = ordersProductRepository;
@@ -66,8 +65,6 @@ namespace OnlineShopWebApp.Controllers
             if (ModelState.IsValid && orderedProduct.Quantity > 0 && await _orderProductRepository.IfExists(0, orderedProduct.OrderId, orderedProduct.ProductId) == false)
             {
                 await _orderProductRepository.Add(orderedProduct);
-
-                await _storageRepository.DecreaseQuantity(orderedProduct.ProductId, orderedProduct.Quantity);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -125,7 +122,7 @@ namespace OnlineShopWebApp.Controllers
                         }
                         else
                         {
-                           await _storageRepository.IncreaseQuantity(orderedProduct.ProductId, oldQuantity - orderedProduct.Quantity);
+                            await _storageRepository.IncreaseQuantity(orderedProduct.ProductId, oldQuantity - orderedProduct.Quantity);
                         }
 
                         await _orderProductRepository.Update(orderedProduct);
@@ -190,8 +187,6 @@ namespace OnlineShopWebApp.Controllers
 
             if (orderedProduct != null)
             {
-                await _storageRepository.IncreaseQuantity(orderedProduct.ProductId, orderedProduct.Quantity);
-
                 await _orderProductRepository.Delete(id);
             }
 
