@@ -21,13 +21,11 @@ namespace OnlineShopWebApp.Controllers
             _genderRepository = genderRepository;
         }
 
-
         // GET: Clients
         public async Task<IActionResult> Index()
         {
             return View(await _clientRepository.GetAll());
         }
-
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -47,7 +45,6 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
-
         // GET: Clients/Create
         public IActionResult Create()
         {
@@ -55,22 +52,24 @@ namespace OnlineShopWebApp.Controllers
             return View();
         }
 
-
         // POST: Clients/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Street,City,Country,PhoneNumber,GenderId")] Client client)
         {
             client.Gender = await _genderRepository.Get(client.GenderId);
-            if (ModelState.IsValid)
+
+            if (ModelState.IsValid && await _clientRepository.IfExists(client.PhoneNumber) == false)
             {
                 await _clientRepository.Add(client);
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
+
             return View(client);
         }
-
 
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -90,7 +89,6 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
-
         // POST: Clients/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -101,7 +99,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
             
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && await _clientRepository.IfExists(client.PhoneNumber) == false)
             {
                 try
                 {
@@ -124,7 +122,6 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
-
         // GET: Clients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -142,7 +139,6 @@ namespace OnlineShopWebApp.Controllers
 
             return View(client);
         }
-
 
         // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -162,7 +158,6 @@ namespace OnlineShopWebApp.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
 
         private bool ClientExists(int id)
         {

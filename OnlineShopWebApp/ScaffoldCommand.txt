@@ -1,3 +1,1 @@
-﻿scaffold-dbcontext -Connection 'Server=DESKTOP-UHVJFHG\MSSQLSERVER2014; Database=OnlineShopAPI; 
-Integrated Security= true;User Id=sa;Password=as' -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir 
-DataModels -Context ShopContext -Force
+﻿scaffold-dbcontext -Connection 'Server=DESKTOP-UHVJFHG\MSSQLSERVER2014; Database=OnlineShopAPI; Integrated Security= true;User Id=sa;Password=as' -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir DataModels -Context ShopContext -Force

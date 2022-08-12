@@ -53,6 +53,10 @@ namespace OnlineShopWebApp.Repositories
             return _shopContext.Clients.Any(e => e.Id == id);
         }
 
+        public async Task<bool> IfExists(string phoneNumber)
+        {
+            return await _shopContext.Clients.AnyAsync(val => val.PhoneNumber == phoneNumber);
+        }
 
         public async Task<bool> Update(Client objectToUpdate)
         {

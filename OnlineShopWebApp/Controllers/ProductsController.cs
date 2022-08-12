@@ -52,7 +52,7 @@ namespace OnlineShopWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Price,ExpirationDate,Description")] Product product)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && await _productRepository.IfExists(product.Name)==false)
             {
                 await _productRepository.Add(product);
                 return RedirectToAction(nameof(Index));
@@ -89,7 +89,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && await _productRepository.IfExists(product.Name) == false)
             {
                 try
                 {
