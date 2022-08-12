@@ -21,18 +21,20 @@ namespace OnlineShopWebApp.Controllers
             _genderRepository = genderRepository;
         }
 
+
         // GET: Clients
         public async Task<IActionResult> Index()
         {
             return View(await _clientRepository.GetAll());
         }
 
+
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var client = await _clientRepository.Get(id);
@@ -45,12 +47,14 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
+
         // GET: Clients/Create
         public IActionResult Create()
         {
             ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType");
             return View();
         }
+
 
         // POST: Clients/Create
         [HttpPost]
@@ -71,12 +75,13 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
+
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var client = await _clientRepository.Get(id);
@@ -85,9 +90,11 @@ namespace OnlineShopWebApp.Controllers
             {
                 return NotFound();
             }
+
             ViewData["GenderType"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
             return View(client);
         }
+
 
         // POST: Clients/Edit/5
         [HttpPost]
@@ -99,7 +106,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
             
-            if (ModelState.IsValid && await _clientRepository.IfExists(client.PhoneNumber) == false)
+            if (ModelState.IsValid /*&& await _clientRepository.IfExists(client.PhoneNumber) == false*/)
             {
                 try
                 {
@@ -118,7 +125,10 @@ namespace OnlineShopWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
+
+            client.Gender = await  _genderRepository.Get(client.GenderId);
+
+            ViewData["GenderType"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
             return View(client);
         }
 
@@ -127,7 +137,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var client = await _clientRepository.Get(id);
@@ -139,6 +149,7 @@ namespace OnlineShopWebApp.Controllers
 
             return View(client);
         }
+
 
         // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -159,7 +170,7 @@ namespace OnlineShopWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientExists(int id)
+        public bool ClientExists(int id)
         {
             return _clientRepository.IfExists(id);
         }
