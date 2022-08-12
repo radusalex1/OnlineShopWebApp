@@ -12,7 +12,7 @@ namespace OnlineShopWebApp.Controllers
     {
         private readonly IProductRepository _productRepository;
 
-        public ProductsController(ShopContext context, IProductRepository productRepository)
+        public ProductsController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
@@ -28,7 +28,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var product = await _productRepository.Get(id);
@@ -60,7 +60,6 @@ namespace OnlineShopWebApp.Controllers
             return View(product);
         }
 
-
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -75,9 +74,9 @@ namespace OnlineShopWebApp.Controllers
             {
                 return NotFound();
             }
+
             return View(product);
         }
-
 
         // POST: Products/Edit/5
         [HttpPost]
@@ -111,7 +110,6 @@ namespace OnlineShopWebApp.Controllers
             return View(product);
         }
 
-
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -129,7 +127,6 @@ namespace OnlineShopWebApp.Controllers
 
             return View(product);
         }
-
 
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]

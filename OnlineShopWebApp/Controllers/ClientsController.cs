@@ -15,9 +15,9 @@ namespace OnlineShopWebApp.Controllers
         private readonly IGenderRepository _genderRepository;
 
 
-        public ClientsController(IClientRepository repo, IGenderRepository genderRepository)
+        public ClientsController(IClientRepository clientRepository, IGenderRepository genderRepository)
         {
-            _clientRepository = repo;
+            _clientRepository = clientRepository;
             _genderRepository = genderRepository;
         }
 
