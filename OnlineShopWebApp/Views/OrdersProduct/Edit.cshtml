@@ -14,13 +14,15 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Order.Client.Name" class="control-label"></label>
-                <select asp-for="OrderId" class="form-control" asp-items="ViewBag.OrderId"></select>
+                <label asp-for="Order.Client.Name" class="control-label">@Html.DisplayNameFor(model => model.Order.Client.Name)</label>
+                <label asp-for="Order.Client.Name" class="control-label">@Html.DisplayFor(model => model.Order.Client.Name)</label>
+                <input type="hidden" asp-for="OrderId" class="form-control" asp-items="ViewBag.OrderId"></input>
                 <span asp-validation-for="OrderId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Product.Name" class="control-label"></label>
-                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                <label asp-for="Product.Name" class="control-label">@Html.DisplayNameFor(model => model.Product.Name)</label>
+                <label asp-for="Product.Name" class="control-label">@Html.DisplayFor(model => model.Product.Name)</label>
+                <input type="hidden" asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
                 <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
             <div class="form-group">
