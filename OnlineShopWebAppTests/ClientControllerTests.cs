@@ -22,15 +22,16 @@ namespace OnlineShopWebAppTests
         {
             _clients = new()
             {
-            new Client() {
-               Id = 1,
-               Name = "Radu",
-               Street = "Street",
-               City ="Brasov",
-               Country ="Romania",
-               PhoneNumber = "0725342567",
-               GenderId = 1
-            }};
+                new Client() {
+                    Id = 1,
+                    Name = "Radu",
+                    Street = "Street",
+                    City ="Brasov",
+                    Country ="Romania",
+                    PhoneNumber = "0725342567",
+                    GenderId = 1
+                }
+            };
 
             _genders = new()
             {
@@ -66,7 +67,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task GetClientByInvalidIdShould()
+        public async Task GetClient_ShouldPass_WhenCallingByInvalidId()
         {
             Client? client = null;
 
@@ -82,7 +83,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task GetClientByIdShould()
+        public async Task GetClient_ShouldPass_WhenCallingByValidId()
         {
             Client? client = _clients[0];
             //arrange
@@ -97,7 +98,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task GetClientByNullIdShould()
+        public async Task GetClient_ShouldPass_WhenCallingByNullId()
         {
             //act
             var actionResult = await _clientController.Details(null);
@@ -108,7 +109,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task CreateClientShould()
+        public async Task CreateClient_ShouldPass_WhenCreatingValidClient()
         {
             //arrange
             Client client = _clients[0];
@@ -125,7 +126,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task CreateInvalidClientShould()
+        public async Task CreateClient_ShouldPass_WhenCreatingInvalidClient()
         {
             //arrange
             Client client = _clients[0];
@@ -144,7 +145,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task OpenEditPageWithNullIdShould()
+        public async Task EditClient_ShouldPass_WhenCallingByNullId()
         {
             //act
             var actionResult = await _clientController.Edit(null);
@@ -155,7 +156,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task OpenEditPageWithInvalidIdShould()
+        public async Task EditClient_ShouldPass_WhenCallingByInvalidId()
         {
             Client? client = null;
             //arrange
@@ -170,7 +171,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task OpenEditPageWithValidIdShould()
+        public async Task EditClient_ShouldPass_WhenCallingByValidId()
         {
             Client? client = _clients[0];
             //arrange
@@ -186,7 +187,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task EditWithInvalidId()
+        public async Task EditClientPost_ShouldPass_WhenCallingByInvalidId()
         {
             Client? client = _clients[0];
 
@@ -199,7 +200,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task EditNonExistingClient()
+        public async Task EditClientPost_ShouldPass_WhenCallingWithInvalidClient()
         {
             //arrange
             Client? client = _clients[0];
@@ -216,7 +217,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public void EditThrowsException()
+        public void EditClientPost_ShouldPass_WhenThrowException()
         {
             //arrange
             Client? client = _clients[0];
@@ -229,7 +230,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task EditClient()
+        public async Task EditClientPost_ShouldPass_WhenEditValidClient()
         {
             //arrange
             Client? client = _clients[0];
@@ -262,7 +263,7 @@ namespace OnlineShopWebAppTests
         //}
 
         [Test]
-        public async Task OpenDeletePageWithNullId()
+        public async Task DeleteClientPage_ShouldPass_WhenPassingNullId()
         {
             //act
             var actionResult = await _clientController.Delete(null);
@@ -273,7 +274,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task OpenDeletePageWithInvalidId()
+        public async Task DeleteClientPage_ShouldPass_WhenPassingInvalidId()
         {
             Client? client = null;
 
@@ -289,7 +290,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task OpenDeletePageWith()
+        public async Task DeleteClientPage_ShouldPass_WhenPassingValidId()
         {
             //arrange
             Client? client = _clients[0];
@@ -305,7 +306,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task DeleteWhenContextIsNull()
+        public async Task DeleteClientPage_ShouldPass_WhenThereAreNoClients()
         {
             //arrange
             List<Client> clients = null;
@@ -336,7 +337,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public void ClientExists()
+        public void ClientExists_ShoudPass_WhenThereAreDuplicates()
         {
             //arrange
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(true);
@@ -349,7 +350,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public void ClientDoesntExists()
+        public void ClientExists_ShoudPass_WhenThereAreNoDuplicates()
         {
             //arrange
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>())).Returns(Task.FromResult(false));

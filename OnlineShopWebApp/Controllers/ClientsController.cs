@@ -106,7 +106,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
             
-            if (ModelState.IsValid /*&& await _clientRepository.IfExists(client.PhoneNumber) == false*/)
+            if (ModelState.IsValid && await _clientRepository.IfExists(client.PhoneNumber) == false)
             {
                 try
                 {
