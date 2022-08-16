@@ -20,7 +20,7 @@ namespace OnlineShopWebAppTests
         private Mock<IOrderRepository> _mockOrderRepository;
         private Mock<IClientRepository> _mockClientRepository;
         private Mock<IStorageRepository> _mockStorageRepository;
-        private Mock<IOrdersProductRepository> _mockOrdersProductRepository;
+        private Mock<IOrderedProductRepository> _mockOrdersProductRepository;
 
 
         [SetUp]
@@ -64,7 +64,7 @@ namespace OnlineShopWebAppTests
             _mockOrderRepository = new Mock<IOrderRepository>();
             _mockClientRepository = new Mock<IClientRepository>();
             _mockStorageRepository = new Mock<IStorageRepository>();
-            _mockOrdersProductRepository = new Mock<IOrdersProductRepository>();
+            _mockOrdersProductRepository = new Mock<IOrderedProductRepository>();
             _ordersController = new OrdersController(_mockOrderRepository.Object,
                                                      _mockClientRepository.Object,
                                                      _mockOrdersProductRepository.Object,

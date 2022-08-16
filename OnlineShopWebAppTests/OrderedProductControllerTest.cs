@@ -9,17 +9,17 @@ using OnlineShopWebApp.Repositories;
 namespace OnlineShopWebAppTests
 {
     [TestFixture]
-    public class OrdersProductControllerTests
+    public class OrderedProductControllerTests
     {
         private OrderedProduct _orderedProduct;
         private List<Order> _orders;
         private List<Product> _products;
         private List<OrderedProduct> _orderedProducts;
-        private OrdersProductController _orderedProductController;
+        private OrderedProductController _orderedProductController;
         private Mock<IStorageRepository> _mockStorageRepository;
         private Mock<IProductRepository> _mockProductRepository;
         private Mock<IOrderRepository> _mockOrderRepository;
-        private Mock<IOrdersProductRepository> _mockOrderedProductRepository;
+        private Mock<IOrderedProductRepository> _mockOrderedProductRepository;
 
 
         [SetUp]
@@ -48,9 +48,9 @@ namespace OnlineShopWebAppTests
             _mockStorageRepository = new Mock<IStorageRepository>();
             _mockProductRepository = new Mock<IProductRepository>();
             _mockOrderRepository = new Mock<IOrderRepository>();
-            _mockOrderedProductRepository = new Mock<IOrdersProductRepository>();
+            _mockOrderedProductRepository = new Mock<IOrderedProductRepository>();
 
-            _orderedProductController = new OrdersProductController(_mockOrderedProductRepository.Object, _mockOrderRepository.Object,
+            _orderedProductController = new OrderedProductController(_mockOrderedProductRepository.Object, _mockOrderRepository.Object,
                                                                    _mockProductRepository.Object, _mockStorageRepository.Object);
         }
 

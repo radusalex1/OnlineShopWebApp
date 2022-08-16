@@ -65,7 +65,7 @@ builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddTransient<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<IGenderRepository, GenderRepository>();
 builder.Services.AddTransient<IStorageRepository, StorageRepository>();
-builder.Services.AddTransient<IOrdersProductRepository, OrdersProductRepository>();
+builder.Services.AddTransient<IOrderedProductRepository, OrderedProductRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
 

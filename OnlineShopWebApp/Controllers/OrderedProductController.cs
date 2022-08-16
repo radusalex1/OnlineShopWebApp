@@ -6,19 +6,19 @@ using OnlineShopWebApp.Repositories;
 
 namespace OnlineShopWebApp.Controllers
 {
-    public class OrdersProductController : Controller
+    public class OrderedProductController : Controller
     {
-        private readonly IOrdersProductRepository _orderProductRepository;
+        private readonly IOrderedProductRepository _orderedProductRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productRepository;
         private readonly IStorageRepository _storageRepository;
 
-        public OrdersProductController(IOrdersProductRepository ordersProductRepository, 
+        public OrderedProductController(IOrderedProductRepository OrderedProductRepository, 
             IOrderRepository orderRepository,
             IProductRepository productRepository, 
             IStorageRepository storageRepository)
         {
-            _orderProductRepository = ordersProductRepository;
+            _orderedProductRepository = OrderedProductRepository;
             _orderRepository = orderRepository;
             _productRepository = productRepository;
             _storageRepository = storageRepository;
@@ -28,7 +28,7 @@ namespace OnlineShopWebApp.Controllers
         // GET: OrderedProducts
         public async Task<IActionResult> Index()
         {
-            return View(await _orderProductRepository.GetAll());
+            return View(await _orderedProductRepository.GetAll());
         }
 
 
@@ -40,7 +40,7 @@ namespace OnlineShopWebApp.Controllers
                 return BadRequest();
             }
 
-            var orderedProduct = await _orderProductRepository.Get(id);
+            var orderedProduct = await _orderedProductRepository.Get(id);
 
             if (orderedProduct == null)
             {
@@ -65,9 +65,9 @@ namespace OnlineShopWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OrderId,ProductId,Quantity")] OrderedProduct orderedProduct)
         {
-            if (ModelState.IsValid && orderedProduct.Quantity > 0 && await _orderProductRepository.IfExists(0, orderedProduct.OrderId, orderedProduct.ProductId) == false)
+            if (ModelState.IsValid && orderedProduct.Quantity > 0 && await _orderedProductRepository.IfExists(0, orderedProduct.OrderId, orderedProduct.ProductId) == false)
             {
-                await _orderProductRepository.Add(orderedProduct);
+                await _orderedProductRepository.Add(orderedProduct);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -87,7 +87,7 @@ namespace OnlineShopWebApp.Controllers
                 return BadRequest();
             }
 
-            var orderedProduct = await _orderProductRepository.Get(id);
+            var orderedProduct = await _orderedProductRepository.Get(id);
 
             if (orderedProduct == null)
             {
@@ -116,9 +116,9 @@ namespace OnlineShopWebApp.Controllers
             {
                 try
                 {
-                    if (await _orderProductRepository.IfExists(id, orderedProduct.OrderId, orderedProduct.ProductId) == false)
+                    if (await _orderedProductRepository.IfExists(id, orderedProduct.OrderId, orderedProduct.ProductId) == false)
                     {
-                        var oldQuantity = await _orderProductRepository.GetQuantityForProductFromOrder(orderedProduct.OrderId, orderedProduct.ProductId);
+                        var oldQuantity = await _orderedProductRepository.GetQuantityForProductFromOrder(orderedProduct.OrderId, orderedProduct.ProductId);
 
                         if (oldQuantity < orderedProduct.Quantity)
                         {
@@ -128,7 +128,7 @@ namespace OnlineShopWebApp.Controllers
                         {
                             await _storageRepository.IncreaseQuantity(orderedProduct.ProductId, oldQuantity - orderedProduct.Quantity);
                         }
-                        await _orderProductRepository.Update(orderedProduct);
+                        await _orderedProductRepository.Update(orderedProduct);
                     }
                     else
                     {
@@ -166,7 +166,7 @@ namespace OnlineShopWebApp.Controllers
                 return BadRequest();
             }
 
-            var orderedProduct = await _orderProductRepository.Get(id);
+            var orderedProduct = await _orderedProductRepository.Get(id);
 
             if (orderedProduct == null)
             {
@@ -182,16 +182,16 @@ namespace OnlineShopWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _orderProductRepository.GetAll() == null)
+            if (await _orderedProductRepository.GetAll() == null)
             {
                 return Problem("Entity set 'ShopContext.OrderedProducts'  is null.");
             }
 
-            var orderedProduct = await _orderProductRepository.Get(id);
+            var orderedProduct = await _orderedProductRepository.Get(id);
 
             if (orderedProduct != null)
             {
-                await _orderProductRepository.Delete(id);
+                await _orderedProductRepository.Delete(id);
             }
 
             return RedirectToAction(nameof(Index));
@@ -200,7 +200,7 @@ namespace OnlineShopWebApp.Controllers
 
         public async Task<bool> OrderedProductExists(int id)
         {
-            return await _orderProductRepository.IfExists(id);
+            return await _orderedProductRepository.IfExists(id);
         }
     }
 }

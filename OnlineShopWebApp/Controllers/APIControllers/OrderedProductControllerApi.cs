@@ -5,11 +5,11 @@ namespace OnlineShopWebApp.Controllers.APIControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersProductControllerApi : ControllerBase
+    public class OrderedProductControllerApi : ControllerBase
     {
-        public readonly IOrdersProductRepository _ordersProductRepository;
+        public readonly IOrderedProductRepository _ordersProductRepository;
 
-        public OrdersProductControllerApi(IOrdersProductRepository ordersProductRepository)
+        public OrderedProductControllerApi(IOrderedProductRepository ordersProductRepository)
         {
             _ordersProductRepository = ordersProductRepository;
         }

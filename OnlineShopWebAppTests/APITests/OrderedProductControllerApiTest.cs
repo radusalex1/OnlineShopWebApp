@@ -5,19 +5,19 @@ using OnlineShopWebApp.Controllers.APIControllers;
 using OnlineShopWebApp.DataModels;
 using OnlineShopWebApp.Repositories;
 
-namespace OnlineShopWebAppTests
+namespace OnlineShopWebAppTests.APITests
 {
     [TestFixture]
-    internal class OrdersProductControllerApiTest
+    internal class OrderedProductControllerApiTest
     {
-        private Mock<IOrdersProductRepository> _mockOrdersProductRepository;
-        private OrdersProductControllerApi _ordersProductControllerApi;
+        private Mock<IOrderedProductRepository> _mockOrdersProductRepository;
+        private OrderedProductControllerApi _ordersProductControllerApi;
 
         [SetUp]
         public void SetUp()
         {
-            _mockOrdersProductRepository = new Mock<IOrdersProductRepository>();
-            _ordersProductControllerApi = new OrdersProductControllerApi(_mockOrdersProductRepository.Object);
+            _mockOrdersProductRepository = new Mock<IOrderedProductRepository>();
+            _ordersProductControllerApi = new OrderedProductControllerApi(_mockOrdersProductRepository.Object);
         }
 
         [TearDown]

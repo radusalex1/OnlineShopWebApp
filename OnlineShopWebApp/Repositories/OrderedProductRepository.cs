@@ -3,9 +3,9 @@ using OnlineShopWebApp.DataModels;
 
 namespace OnlineShopWebApp.Repositories
 {
-    public class OrdersProductRepository : BaseRepository, IOrdersProductRepository
+    public class OrderedProductRepository : BaseRepository, IOrderedProductRepository
     {
-        public OrdersProductRepository(ShopContext shopContext) : base(shopContext)
+        public OrderedProductRepository(ShopContext shopContext) : base(shopContext)
         {
         }
 
