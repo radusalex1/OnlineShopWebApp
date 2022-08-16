@@ -5,7 +5,7 @@ namespace OnlineShopWebApp.Repositories
     /// <summary>
     /// TODO: maybe change theese names.
     /// </summary>
-    public interface IOrdersProductRepository : IBaseOperations<OrderedProduct>
+    public interface IOrderedProductRepository : IBaseOperations<OrderedProduct>
     {
         /// <summary>
         /// Return all the products from an Order.

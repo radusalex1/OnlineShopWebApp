@@ -5,7 +5,7 @@ using OnlineShopWebApp.Controllers.APIControllers;
 using OnlineShopWebApp.DataModels;
 using OnlineShopWebApp.Repositories;
 
-namespace OnlineShopWebAppTests
+namespace OnlineShopWebAppTests.APITests
 {
     [TestFixture]
     public class OrdersControllerApiTest
@@ -135,7 +135,7 @@ namespace OnlineShopWebAppTests
 
             //act
             var actionResult = await _ordersControllerApi.GetClientOrders(1);
-            
+
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);

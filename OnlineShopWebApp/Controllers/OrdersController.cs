@@ -10,17 +10,17 @@ namespace OnlineShopWebApp.Controllers
     {
         public readonly IOrderRepository _orderRepository;
         public readonly IClientRepository _clientRepository;
-        public readonly IOrdersProductRepository _ordersProductRepository;
+        public readonly IOrderedProductRepository _OrderedProductRepository;
         public readonly IStorageRepository _storageRepository;
 
         public OrdersController(IOrderRepository orderRepository,
             IClientRepository clientRepository,
-            IOrdersProductRepository ordersProductRepository,
+            IOrderedProductRepository orderedProductRepository,
             IStorageRepository storageRepository)
         {
             _orderRepository = orderRepository;
             _clientRepository = clientRepository;
-            _ordersProductRepository = ordersProductRepository;
+            _OrderedProductRepository = orderedProductRepository;
             _storageRepository = storageRepository;
         }
 
@@ -166,7 +166,7 @@ namespace OnlineShopWebApp.Controllers
 
             if (order != null)
             {
-                var orderProductsWithQuantity = await _ordersProductRepository.GetProductsWithQuantityFromOrder(id);
+                var orderProductsWithQuantity = await _OrderedProductRepository.GetProductsWithQuantityFromOrder(id);
 
                 foreach (var item in orderProductsWithQuantity)
                 {
