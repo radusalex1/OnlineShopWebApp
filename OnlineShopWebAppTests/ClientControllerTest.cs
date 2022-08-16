@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -11,6 +11,7 @@ namespace OnlineShopWebAppTests
     [TestFixture]
     public class ClientControllerTests
     {
+        private Client _client;
         private List<Client> _clients;
         private List<Gender> _genders;
         private ClientsController _clientController;
@@ -39,6 +40,8 @@ namespace OnlineShopWebAppTests
                 new Gender() { Id = 2, GenderType ="Female"}
             };
 
+            _client = _clients[0];
+
             _mockClientRepository = new Mock<IClientRepository>();
             _mockGenderRepository = new Mock<IGenderRepository>();
             _clientController = new ClientsController(_mockClientRepository.Object, _mockGenderRepository.Object);
@@ -47,7 +50,6 @@ namespace OnlineShopWebAppTests
         [TearDown]
         public void TearDown()
         {
-            //_clientController = null;
             _mockClientRepository.Reset();
             _mockGenderRepository.Reset();
         }
@@ -67,11 +69,11 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task GetClient_ShouldPass_WhenCallingByInvalidId()
+        public async Task GetClient_ShouldPass_WhenObjectNotFound()
         {
+            //arrange
             Client? client = null;
 
-            //arrange
             _mockClientRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(client));
 
             //act
@@ -85,9 +87,8 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task GetClient_ShouldPass_WhenCallingByValidId()
         {
-            Client? client = _clients[0];
             //arrange
-            _mockClientRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(client));
+            _mockClientRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(_client));
 
             //act
             var actionResult = await _clientController.Details(1);
@@ -112,13 +113,11 @@ namespace OnlineShopWebAppTests
         public async Task CreateClient_ShouldPass_WhenCreatingValidClient()
         {
             //arrange
-            Client client = _clients[0];
-
             _mockClientRepository.Setup(m => m.Add(It.IsAny<Client>())).Returns(Task.FromResult(true));
             _mockClientRepository.Setup(n => n.IfExists(It.IsAny<string>())).Returns(Task.FromResult(false));
 
             //act
-            var actionResult = await _clientController.Create(client);
+            var actionResult = await _clientController.Create(_client);
 
             //assert
             Assert.That(actionResult, Is.Not.Null);
@@ -129,15 +128,15 @@ namespace OnlineShopWebAppTests
         public async Task CreateClient_ShouldPass_WhenCreatingInvalidClient()
         {
             //arrange
-            Client client = _clients[0];
-            
+            _mockClientRepository.Setup(m => m.Add(It.IsAny<Client>())).Returns(Task.FromResult(false));
+
             _mockClientRepository.Setup(n => n.IfExists(It.IsAny<string>())).Returns(Task.FromResult(true));
             _mockGenderRepository.Setup(n => n.Get(It.IsAny<int>())).Returns(Task.FromResult(_genders[0]));
             _mockGenderRepository.Setup(n => n.GetAll()).Returns(Task.FromResult(_genders));
 
 
             //act
-            var actionResult = await _clientController.Create(client);
+            var actionResult = await _clientController.Create(_client);
 
             //assert
             Assert.That(actionResult, Is.Not.Null);
@@ -145,7 +144,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task EditClient_ShouldPass_WhenCallingByNullId()
+        public async Task EditClientPage_ShouldPass_WhenCallingByNullId()
         {
             //act
             var actionResult = await _clientController.Edit(null);
@@ -156,10 +155,11 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task EditClient_ShouldPass_WhenCallingByInvalidId()
+        public async Task EditClientPage_ShouldPass_WhenObjectNotFound()
         {
-            Client? client = null;
             //arrange
+            Client? client = null;
+
             _mockClientRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(client));
 
             //act
@@ -171,11 +171,10 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task EditClient_ShouldPass_WhenCallingByValidId()
+        public async Task EditClientPage_ShouldPass_WhenCallingByValidId()
         {
-            Client? client = _clients[0];
             //arrange
-            _mockClientRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(client));
+            _mockClientRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(_client));
             _mockGenderRepository.Setup(n => n.GetAll()).Returns(Task.FromResult(_genders));
 
             //act
@@ -189,10 +188,8 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task EditClientPost_ShouldPass_WhenCallingByInvalidId()
         {
-            Client? client = _clients[0];
-
             //act
-            var actionResult = await _clientController.Edit(2, client);
+            var actionResult = await _clientController.Edit(2, _client);
 
             //assert
             Assert.That(actionResult, Is.Not.Null);
@@ -200,17 +197,16 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task EditClientPost_ShouldPass_WhenCallingWithInvalidClient()
+        public async Task EditClientPost_ShouldPass_WhenClientNotFound()
         {
             //arrange
-            Client? client = _clients[0];
-            client.Id = 2;
+            _client.Id = 2;
 
             _mockClientRepository.Setup(m => m.Update(It.IsAny<Client>())).Throws<DbUpdateConcurrencyException>();
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
-            var actionResult = await _clientController.Edit(2, client);
+            var actionResult = await _clientController.Edit(2, _client);
 
             //assert
             Assert.That(actionResult, Is.Not.Null);
@@ -221,27 +217,23 @@ namespace OnlineShopWebAppTests
         public void EditClientPost_ShouldPass_WhenThrowException()
         {
             //arrange
-            Client? client = _clients[0];
-
             _mockClientRepository.Setup(m => m.Update(It.IsAny<Client>())).Throws<DbUpdateConcurrencyException>();
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //assert
-            Assert.That(async () => await _clientController.Edit(1, client), Throws.TypeOf<DbUpdateConcurrencyException>());
+            Assert.That(async () => await _clientController.Edit(1, _client), Throws.TypeOf<DbUpdateConcurrencyException>());
         }
 
         [Test]
         public async Task EditClientPost_ShouldPass_WhenEditValidClient()
         {
             //arrange
-            Client? client = _clients[0];
-
             _mockClientRepository.Setup(m => m.Update(It.IsAny<Client>())).Returns(Task.FromResult(true));
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
-            var actionResult = await _clientController.Edit(1, client);
+            var actionResult = await _clientController.Edit(1, _client);
 
             //assert
             Assert.That(actionResult, Is.Not.Null);
@@ -249,17 +241,16 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task EditClient_ShouldPass_WhenPassingInvalidClient()
+        public async Task EditClientPost_ShouldPass_WhenCallingWithInvalidClient()
         {
             //arrange
-            Client? client = _clients[0];
-            client.Id = 2;
+            _client.Id = 2;
 
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(false));
             _mockGenderRepository.Setup(n => n.GetAll()).Returns(Task.FromResult(_genders));
 
             //act
-            var actionResult = await _clientController.Edit(2, client);
+            var actionResult = await _clientController.Edit(2, _client);
 
             //assert
             Assert.That(actionResult, Is.Not.Null);
@@ -278,11 +269,11 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task DeleteClientPage_ShouldPass_WhenPassingInvalidId()
+        public async Task DeleteClientPage_ShouldPass_WhenObjectNotFound()
         {
+            //arrange
             Client? client = null;
 
-            //arrange
             _mockClientRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(client));
 
             //act
@@ -297,9 +288,7 @@ namespace OnlineShopWebAppTests
         public async Task DeleteClientPage_ShouldPass_WhenPassingValidId()
         {
             //arrange
-            Client? client = _clients[0];
-
-            _mockClientRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(client));
+            _mockClientRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(_client));
 
             //act
             var actionResult = await _clientController.Delete(1);
@@ -310,7 +299,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task DeleteClientPage_ShouldPass_WhenThereAreNoClients()
+        public async Task DeleteClient_ShouldPass_WhenThereAreNoClients()
         {
             //arrange
             List<Client> clients = null;
@@ -326,7 +315,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task DeleteClientPage_ShouldPass_WhenCallingDeletePostMethod()
+        public async Task DeleteClient_ShouldPass_WhenIdIsValid()
         {
             //arrange
             _mockClientRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(_clients));
@@ -340,7 +329,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task ClientExists_ShoudPass_WhenThereAreDuplicates()
+        public async Task ClientExists_ShoudPass_WhenClientExists()
         {
             //arrange
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
@@ -353,7 +342,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task ClientExists_ShoudPass_WhenThereAreNoDuplicates()
+        public async Task ClientExists_ShoudPass_WhenClientDoesntExist()
         {
             //arrange
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>())).Returns(Task.FromResult(false));

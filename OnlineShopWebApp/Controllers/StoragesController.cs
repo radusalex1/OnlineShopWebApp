@@ -29,7 +29,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var client = await _storageRepository.Get(id);
@@ -72,7 +72,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var storage = await _storageRepository.Get(id);
@@ -130,7 +130,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var storage = await _storageRepository.Get(id);
@@ -154,7 +154,7 @@ namespace OnlineShopWebApp.Controllers
                 return Problem("Entity set 'ShopContext.Storages' is null.");
             }
 
-            var storage = await _storageRepository.GetAll();
+            var storage = await _storageRepository.Get(id);
 
             if (storage != null)
             {
@@ -165,7 +165,7 @@ namespace OnlineShopWebApp.Controllers
         }
 
 
-        private async Task<bool> StorageExists(int id)
+        public async Task<bool> StorageExists(int id)
         {
             return await _storageRepository.IfExists(id);
         }
