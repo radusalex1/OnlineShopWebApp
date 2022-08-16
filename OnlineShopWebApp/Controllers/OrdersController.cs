@@ -38,7 +38,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var order = await _orderRepository.Get(id);
@@ -137,7 +137,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var order = await _orderRepository.Get(id);
@@ -156,6 +156,12 @@ namespace OnlineShopWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
+            if (await _orderRepository.GetAll() == null)
+            {
+                return Problem("Entity set 'ShopContext.Clients' is null.");
+            }
+
             var order = await _orderRepository.Get(id);
 
             if (order != null)
@@ -168,9 +174,11 @@ namespace OnlineShopWebApp.Controllers
                 }
 
                 await _orderRepository.Delete(id);
+
             }
 
             return RedirectToAction(nameof(Index));
+           
         }
 
 

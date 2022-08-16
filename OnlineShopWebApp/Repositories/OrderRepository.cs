@@ -18,7 +18,7 @@ namespace OnlineShopWebApp.Repositories
             return true;
         }
 
-        public async Task<bool> CancelOrderById(int orderId)
+        public async Task<bool> CancelOrderById(int? orderId)
         {      
             var order =  await _shopContext.Orders
                .Include(val => val.Client)
@@ -73,7 +73,7 @@ namespace OnlineShopWebApp.Repositories
                  .ToListAsync();
         }
 
-        public async Task<List<Order>> GetOrdersByClientId(int clientId)
+        public async Task<List<Order>> GetOrdersByClientId(int? clientId)
         {
             return await _shopContext.Orders
                 .Where(c=>c.ClientId==clientId)
@@ -85,7 +85,7 @@ namespace OnlineShopWebApp.Repositories
             return await _shopContext.Orders.AnyAsync(p => p.Id == id);
         }
 
-        public async Task<bool> UnCancelOrderById(int orderId)
+        public async Task<bool> UnCancelOrderById(int? orderId)
         {
             var order = await _shopContext.Orders
                .Include(val => val.Client)
