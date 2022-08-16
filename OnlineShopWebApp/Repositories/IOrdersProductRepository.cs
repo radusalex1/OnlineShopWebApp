@@ -8,7 +8,7 @@ namespace OnlineShopWebApp.Repositories
     public interface IOrdersProductRepository : IBaseOperations<OrderedProduct>
     {
         /// <summary>
-        /// Return all the products from an Order;
+        /// Return all the products from an Order.
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
