@@ -103,7 +103,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
             
-            if (ModelState.IsValid && await _clientRepository.IfExists(client.PhoneNumber) == false)
+            if (ModelState.IsValid && await _clientRepository.IfExists(client.PhoneNumber, client.Id))
             {
                 try
                 {
@@ -111,7 +111,7 @@ namespace OnlineShopWebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientExists(client.Id))
+                    if (!await ClientExists(client.Id))
                     {
                         return NotFound();
                     }
@@ -167,9 +167,10 @@ namespace OnlineShopWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public bool ClientExists(int id)
+
+        public async Task<bool> ClientExists(int id)
         {
-            return _clientRepository.IfExists(id);
+            return await _clientRepository.IfExists(id);
         }
     }
 }

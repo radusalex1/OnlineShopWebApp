@@ -103,7 +103,7 @@ namespace OnlineShopWebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StorageExists(storage.Id))
+                    if (! await StorageExists(storage.Id))
                     {
                         return NotFound();
                     }
@@ -159,9 +159,9 @@ namespace OnlineShopWebApp.Controllers
         }
 
 
-        private bool StorageExists(int id)
+        private async Task<bool> StorageExists(int id)
         {
-            return _storageRepository.IfExists(id);
+            return await _storageRepository.IfExists(id);
         }
     }
 }

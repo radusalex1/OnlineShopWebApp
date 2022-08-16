@@ -70,9 +70,9 @@ namespace OnlineShopWebApp.Repositories
             }
         }
 
-        public bool IfExists(int id)
+        public async Task<bool> IfExists(int id)
         {
-            return _shopContext.Storages.Any(e => e.Id == id);
+            return await _shopContext.Storages.AnyAsync(e => e.Id == id);
         }
 
         public async Task<bool> IncreaseQuantity(int productId, int quantity)

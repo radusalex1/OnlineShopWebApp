@@ -55,8 +55,6 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task CreateProduct_ShouldPass_WhenCreatingValidProduct()
         {
-           
-
             //act
             var result = await _productsController.Create(_products[0]);
 
@@ -68,7 +66,7 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task CreateProduct_ShouldPass_WhenCreatingInvalidProduct()
         {
-          
+            //arrange
             _mockProductRepository.Setup(m => m.Add(It.IsAny<Product>())).Returns(Task.FromResult(false));
             _mockProductRepository.Setup(n => n.IfExists(It.IsAny<string>())).Returns(Task.FromResult(true));
 
@@ -147,8 +145,7 @@ namespace OnlineShopWebAppTests
 
         [Test]
         public async Task EditProduct_ShouldPass_WhenCallingByValidId()
-        {
-            
+        {         
             //arrange
             _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(_products[0]));
 
@@ -164,8 +161,6 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task EditProductPost_ShouldPass_WhenCallingByInvalidId()
         {
-          
-
             //act
             var actionResult = await _productsController.Edit(2, _products[0]);
 
@@ -197,7 +192,7 @@ namespace OnlineShopWebAppTests
            
             //arrange
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Throws<DbUpdateConcurrencyException>();
-            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(true);
+            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //assert
             Assert.That(async () => await _productsController.Edit(1, _products[0]), Throws.TypeOf<DbUpdateConcurrencyException>());
@@ -290,13 +285,13 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public void ProductExists_ShoudPass_WhenThereAreDuplicates()
+        public async Task ProductExists_ShoudPass_WhenThereAreDuplicates()
         {
             //arrange
-            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(true);
+            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
-            var actionResult = _productsController.ProductExists(1);
+            var actionResult = await _productsController.ProductExists(1);
 
             //assert
             Assert.That(actionResult, Is.EqualTo(true));
@@ -304,13 +299,13 @@ namespace OnlineShopWebAppTests
 
 
         [Test]
-        public void ProductExists_ShoudPass_WhenThereAreNoDuplicates()
+        public async Task ProductExists_ShoudPass_WhenThereAreNoDuplicates()
         {
             //arrange
             _mockProductRepository.Setup(m => m.IfExists(It.IsAny<string>())).Returns(Task.FromResult(false));
 
             //act
-            var actionResult = _productsController.ProductExists(1);
+            var actionResult = await _productsController.ProductExists(1);
 
             //assert
             Assert.That(actionResult, Is.EqualTo(false));

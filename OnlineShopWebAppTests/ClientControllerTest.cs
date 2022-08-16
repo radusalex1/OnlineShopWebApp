@@ -207,6 +207,7 @@ namespace OnlineShopWebAppTests
             client.Id = 2;
 
             _mockClientRepository.Setup(m => m.Update(It.IsAny<Client>())).Throws<DbUpdateConcurrencyException>();
+            _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
             var actionResult = await _clientController.Edit(2, client);
@@ -223,7 +224,8 @@ namespace OnlineShopWebAppTests
             Client? client = _clients[0];
 
             _mockClientRepository.Setup(m => m.Update(It.IsAny<Client>())).Throws<DbUpdateConcurrencyException>();
-            _mockClientRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(true);
+            _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+            _mockClientRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //assert
             Assert.That(async () => await _clientController.Edit(1, client), Throws.TypeOf<DbUpdateConcurrencyException>());
@@ -236,6 +238,7 @@ namespace OnlineShopWebAppTests
             Client? client = _clients[0];
 
             _mockClientRepository.Setup(m => m.Update(It.IsAny<Client>())).Returns(Task.FromResult(true));
+            _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
             var actionResult = await _clientController.Edit(1, client);
@@ -245,22 +248,23 @@ namespace OnlineShopWebAppTests
             Assert.That(actionResult, Is.InstanceOf<RedirectToActionResult>());
         }
 
-        //[Test]
-        //public async Task EditInvalidClient()
-        //{
-        //    ////arrange
-        //    //Client? client = _clients[0];
-        //    //client.Name = null;
+        [Test]
+        public async Task EditInvalidClient()
+        {
+            //arrange
+            Client? client = _clients[0];
+            client.Id = 2;
 
-        //    //_mockClientRepository.Setup(mode
+            _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(false));
+            _mockGenderRepository.Setup(n => n.GetAll()).Returns(Task.FromResult(_genders));
 
-        //    ////act
-        //    //var actionResult = await _clientController.Edit(1, client);
+            //act
+            var actionResult = await _clientController.Edit(2, client);
 
-        //    ////assert
-        //    //Assert.That(actionResult, Is.Not.Null);
-        //    //Assert.That(actionResult, Is.InstanceOf<ViewResult>());
-        //}
+            //assert
+            Assert.That(actionResult, Is.Not.Null);
+            Assert.That(actionResult, Is.InstanceOf<ViewResult>());
+        }
 
         [Test]
         public async Task DeleteClientPage_ShouldPass_WhenPassingNullId()
@@ -337,26 +341,26 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public void ClientExists_ShoudPass_WhenThereAreDuplicates()
+        public async Task ClientExists_ShoudPass_WhenThereAreDuplicates()
         {
             //arrange
-            _mockClientRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(true);
+            _mockClientRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
-            var actionResult = _clientController.ClientExists(1);
+            var actionResult = await _clientController.ClientExists(1);
 
             //assert
             Assert.That(actionResult, Is.EqualTo(true));
         }
 
         [Test]
-        public void ClientExists_ShoudPass_WhenThereAreNoDuplicates()
+        public async Task ClientExists_ShoudPass_WhenThereAreNoDuplicates()
         {
             //arrange
             _mockClientRepository.Setup(m => m.IfExists(It.IsAny<string>())).Returns(Task.FromResult(false));
 
             //act
-            var actionResult = _clientController.ClientExists(1);
+            var actionResult = await _clientController.ClientExists(1);
 
             //assert
             Assert.That(actionResult, Is.EqualTo(false));
