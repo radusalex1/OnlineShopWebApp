@@ -7,9 +7,7 @@ namespace OnlineShopWebApp.Repositories
     {
         public OrderRepository(ShopContext shopContext) : base(shopContext)
         {
-
         }
-
 
         public async Task<bool> Add(Order objectToAdd)
         {
@@ -32,6 +30,8 @@ namespace OnlineShopWebApp.Repositories
             {
                 return false;
             }
+
+            order.Canceled = true;
 
             _shopContext.Orders.Update(order);
 
@@ -86,6 +86,26 @@ namespace OnlineShopWebApp.Repositories
             return _shopContext.Orders.Any(p => p.Id == id);
         }
 
+        public async Task<bool> UnCancelOrderById(int orderId)
+        {
+            var order = await _shopContext.Orders
+               .Include(val => val.Client)
+               .ThenInclude(c => c.Gender)
+               .FirstOrDefaultAsync(val => val.Id == orderId);
+
+            if (order == null)
+            {
+                return false;
+            }
+
+            order.Canceled = false;
+
+            _shopContext.Orders.Update(order);
+
+            await _shopContext.SaveChangesAsync();
+
+            return true;
+        }
 
         public async Task<bool> Update(Order objectToUpdate)
         {

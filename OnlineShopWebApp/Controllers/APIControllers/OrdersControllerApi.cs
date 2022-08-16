@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopWebApp.DataModels;
 using OnlineShopWebApp.Repositories;
 
 namespace OnlineShopWebApp.Controllers.APIControllers
@@ -20,7 +19,25 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         {
             if (orderId < 1)
             {
-                return BadRequest("Invalid Order");
+                return BadRequest("Invalid OrderId");
+            }
+
+            var result = await _orderRepository.CancelOrderById(orderId);
+
+            if (!result)
+            {
+                return NotFound("Order not found!");
+            }
+
+            return Ok($"The order {orderId} was canceled successfully!");
+        }
+
+        [HttpPut("UnCancelOrderById")]
+        public async Task<IActionResult> UnCancelOrderById(int orderId)
+        {
+            if (orderId < 1)
+            {
+                return BadRequest("Invalid OrderId");
             }
 
             var result = await _orderRepository.CancelOrderById(orderId);
