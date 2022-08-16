@@ -15,9 +15,9 @@ namespace OnlineShopWebApp.Controllers
         private readonly IGenderRepository _genderRepository;
 
 
-        public ClientsController(IClientRepository repo, IGenderRepository genderRepository)
+        public ClientsController(IClientRepository clientRepository, IGenderRepository genderRepository)
         {
-            _clientRepository = repo;
+            _clientRepository = clientRepository;
             _genderRepository = genderRepository;
         }
 
@@ -106,7 +106,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
             
-            if (ModelState.IsValid /*&& await _clientRepository.IfExists(client.PhoneNumber) == false*/)
+            if (ModelState.IsValid && await _clientRepository.IfExists(client.PhoneNumber) == false)
             {
                 try
                 {

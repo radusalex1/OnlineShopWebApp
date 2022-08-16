@@ -12,7 +12,7 @@ namespace OnlineShopWebApp.Controllers
     {
         private readonly IProductRepository _productRepository;
 
-        public ProductsController(ShopContext context, IProductRepository productRepository)
+        public ProductsController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
@@ -28,7 +28,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var product = await _productRepository.Get(id);
@@ -60,13 +60,12 @@ namespace OnlineShopWebApp.Controllers
             return View(product);
         }
 
-
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var product = await _productRepository.Get(id);
@@ -75,9 +74,9 @@ namespace OnlineShopWebApp.Controllers
             {
                 return NotFound();
             }
+
             return View(product);
         }
-
 
         // POST: Products/Edit/5
         [HttpPost]
@@ -111,13 +110,12 @@ namespace OnlineShopWebApp.Controllers
             return View(product);
         }
 
-
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var product = await _productRepository.Get(id);
@@ -130,13 +128,19 @@ namespace OnlineShopWebApp.Controllers
             return View(product);
         }
 
-
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
+            if (await _productRepository.GetAll() == null)
+            {
+                return Problem("Entity set 'ShopContext.Products' is null.");
+            }
+
             var product = _productRepository.Get(id).Result;
+
             if (product != null)
             {
                 await _productRepository.Delete(product.Id);
@@ -145,7 +149,7 @@ namespace OnlineShopWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        public bool ProductExists(int id)
         {
             return _productRepository.IfExists(id);
         }
