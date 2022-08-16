@@ -6,7 +6,7 @@ using OnlineShopWebApp.Repositories;
 namespace OnlineShopWebApp.Controllers
 {
     /// <summary>
-    /// TODO: 2 produse sa nu aiba acelas nume;
+    /// TODO: 2 produse sa nu aiba acelas nume - de refacut.
     /// </summary>
     public class ProductsController : Controller
     {

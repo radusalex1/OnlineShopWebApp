@@ -9,7 +9,7 @@ using OnlineShopWebApp.Repositories;
 namespace OnlineShopWebAppTests
 {
     [TestFixture]
-    internal class ProductControllerTest
+    public class ProductControllerTest
     {
         private List<Product> _products;
         private ProductsController _productsController;

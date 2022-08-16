@@ -9,7 +9,7 @@ using OnlineShopWebApp.Repositories;
 namespace OnlineShopWebAppTests
 {
     [TestFixture]
-    internal class ClientControllerTest
+    public class ClientControllerTests
     {
         private List<Client> _clients;
         private List<Gender> _genders;
@@ -35,8 +35,8 @@ namespace OnlineShopWebAppTests
 
             _genders = new()
             {
-            new Gender() { Id = 1, GenderType = "Male"},
-            new Gender() { Id = 2, GenderType ="Female"}
+                new Gender() { Id = 1, GenderType = "Male"},
+                new Gender() { Id = 2, GenderType ="Female"}
             };
 
             _mockClientRepository = new Mock<IClientRepository>();
