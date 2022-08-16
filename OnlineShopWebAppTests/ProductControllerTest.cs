@@ -12,6 +12,8 @@ namespace OnlineShopWebAppTests
     public class ProductControllerTest
     {
         private List<Product> _products;
+        private Product nullProduct;
+        List<Product> emptyListOfProducts;
         private ProductsController _productsController;
         private Mock<IProductRepository> _mockProductRepository;
 
@@ -27,7 +29,8 @@ namespace OnlineShopWebAppTests
                     Price=200
                 }
             };
-
+            nullProduct = null;
+            emptyListOfProducts = null;
             _mockProductRepository = new Mock<IProductRepository>();
             _productsController = new ProductsController(_mockProductRepository.Object);
         }
@@ -81,9 +84,9 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task GetProduct_ShouldPass_WhenCallingByInvalidId()
         {
-            Product? product = null;
+          
 
-            _mockProductRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(product));
+            _mockProductRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(nullProduct));
 
             var actionResult = await _productsController.Details(2);
 
@@ -131,9 +134,8 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task EditProduct_ShouldPass_WhenCallingByInvalidId()
         {
-            Product? product = null;
             //arrange
-            _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(product));
+            _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(nullProduct));
 
             //act
             var actionResult = await _productsController.Edit(2);
@@ -226,10 +228,9 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task DeleteProductPage_ShouldPass_WhenPassingInvalidId()
         {
-            Product? product = null;
 
             //arrange
-            _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(product));
+            _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(nullProduct));
 
             //act
             var actionResult = await _productsController.Delete(2);
@@ -257,8 +258,6 @@ namespace OnlineShopWebAppTests
         public async Task DeleteProductPage_ShouldPass_WhenThereAreNoProducts()
         {
             //arrange
-            List<Product> emptyListOfProducts = null;
-
             _mockProductRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(emptyListOfProducts));
 
             //act

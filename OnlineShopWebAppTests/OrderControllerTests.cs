@@ -13,6 +13,9 @@ namespace OnlineShopWebAppTests
         private List<Order> _orders;
         private List<Client> _clients;
         private List<Gender> _genders;
+        private List<Order>? orders;
+        private Order order;
+        private Order nullOrder;
         private OrdersController _ordersController;
         private Mock<IOrderRepository> _mockOrderRepository;
         private Mock<IClientRepository> _mockClientRepository;
@@ -23,6 +26,8 @@ namespace OnlineShopWebAppTests
         [SetUp]
         public void Setup()
         {
+            orders = null;
+            nullOrder = null;
             _orders = new()
             {
                 new Order()
@@ -34,6 +39,8 @@ namespace OnlineShopWebAppTests
                     Canceled=false
                 }
             };
+
+            order = _orders[0];
 
             _clients = new()
             {
@@ -92,9 +99,8 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task GetOrder_ShoundPass_WhenCallingByInvalidId()
         {
-            Order? order = null;
             //arrange
-            _mockOrderRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(order));
+            _mockOrderRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(nullOrder));
 
             //act
             var actionResult = await _ordersController.Details(2);
@@ -107,7 +113,6 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task GetOrder_ShouldPass_WhenCallingByValidId()
         {
-            Order? order = _orders[0];
             //arrange
             _mockOrderRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(order));
 
@@ -134,8 +139,6 @@ namespace OnlineShopWebAppTests
         public async Task CreateOrder_ShouldPass_WhenCreatingValidOrder()
         {
             //arrage
-            Order order = _orders[0];
-
             _mockOrderRepository.Setup(m => m.Add(It.IsAny<Order>())).Returns(Task.FromResult(true));
             _mockOrderRepository.Setup(n => n.IfExists(It.IsAny<int>())).Returns(Task.FromResult(false));
 
@@ -152,8 +155,6 @@ namespace OnlineShopWebAppTests
         public async Task CreateOrder_ShouldPass_WhenCreatingInvalidOrder()
         {
             //arrange
-            Order order = _orders[0];
-
             order.Client = null;
 
             order.ClientId = 0;
@@ -185,9 +186,7 @@ namespace OnlineShopWebAppTests
         public async Task DeleteOrderPage_ShouldPass_WhenPassingInvalidId()
         {
             //arrange
-            Order? order = null;
-
-            _mockOrderRepository.Setup(x => x.Get(It.IsAny<int?>())).Returns(Task.FromResult(order));
+            _mockOrderRepository.Setup(x => x.Get(It.IsAny<int?>())).Returns(Task.FromResult(nullOrder));
 
             //act
             var actionResult = await _ordersController.Delete(2);
@@ -201,8 +200,6 @@ namespace OnlineShopWebAppTests
         public async Task DeleteOrderPage_ShouldPass_WhenPassingValidId()
         {
             //arrange
-            Order? order = _orders[0];
-
             _mockOrderRepository.Setup(x => x.Get(It.IsAny<int>())).Returns(Task.FromResult(order));
 
             //act
@@ -218,8 +215,6 @@ namespace OnlineShopWebAppTests
         public async Task DeleteOrderPage_ShouldPass_WhenThereAreNoOrders()
         {
             //arrange
-            List<Order> orders = null;
-
             _mockOrderRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(orders));
 
             //act
