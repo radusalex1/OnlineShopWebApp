@@ -29,6 +29,12 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Client.Name)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Canceled)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Canceled)
+        </dd>
     </dl>
     
     <form asp-action="Delete">

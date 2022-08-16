@@ -62,7 +62,7 @@ namespace OnlineShopWebApp.Controllers
         // POST: Orders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ClientId,Created,TotalAmount")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,ClientId,Created")] Order order)
         {
             order.Client = await _clientRepository.Get(order.ClientId);
 
@@ -101,7 +101,7 @@ namespace OnlineShopWebApp.Controllers
         // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ClientId,Created,TotalAmount")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ClientId,Created")] Order order)
         {
             if (id != order.Id)
             {
