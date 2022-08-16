@@ -37,7 +37,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var orderedProduct = await _orderProductRepository.Get(id);
@@ -73,7 +73,6 @@ namespace OnlineShopWebApp.Controllers
             }
 
             ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Id", orderedProduct.Order);
-
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", orderedProduct.Product);
 
             return View(orderedProduct);
@@ -85,7 +84,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var orderedProduct = await _orderProductRepository.Get(id);
@@ -127,9 +126,7 @@ namespace OnlineShopWebApp.Controllers
                         {
                             await _storageRepository.IncreaseQuantity(orderedProduct.ProductId, oldQuantity - orderedProduct.Quantity);
                         }
-
                         await _orderProductRepository.Update(orderedProduct);
-
                     }
                     else
                     {
@@ -162,7 +159,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var orderedProduct = await _orderProductRepository.Get(id);
@@ -197,7 +194,7 @@ namespace OnlineShopWebApp.Controllers
         }
 
 
-        private async Task<bool> OrderedProductExists(int id)
+        public async Task<bool> OrderedProductExists(int id)
         {
             return await _orderProductRepository.IfExists(id);
         }

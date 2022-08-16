@@ -69,7 +69,7 @@ namespace OnlineShopWebApp.Repositories
 
         public async Task<List<OrderedProduct>> GetProductsWithQuantityFromOrder(int orderId)
         {
-            return await  _shopContext.OrderedProducts.Where(val => val.OrderId == orderId).ToListAsync();
+            return await _shopContext.OrderedProducts.Where(val => val.OrderId == orderId).ToListAsync();
         }
 
         public async Task<int> GetQuantityForProductFromOrder(int orderId, int productId)
@@ -86,14 +86,14 @@ namespace OnlineShopWebApp.Repositories
             return await _shopContext.OrderedProducts.AnyAsync(e => e.Id == id);
         }
 
-        public async Task<bool> IfExists(int entityId,int orderId, int productId)
+        public async Task<bool> IfExists(int entityId, int orderId, int productId)
         {
-            return await _shopContext.OrderedProducts.AnyAsync(val=>val.OrderId == orderId && val.ProductId==productId && val.Id!=entityId);
+            return await _shopContext.OrderedProducts.AnyAsync(val => val.OrderId == orderId && val.ProductId == productId && val.Id != entityId);
         }
 
         public async Task<bool> Update(OrderedProduct objectToUpdate)
         {
-             _shopContext.OrderedProducts.Update(objectToUpdate);
+            _shopContext.OrderedProducts.Update(objectToUpdate);
 
             await _shopContext.SaveChangesAsync();
 

@@ -60,7 +60,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
 
             var result = await _orderRepository.GetOrdersByClientId(clientId);
 
-            if (result ==null || result.Count == 0)
+            if (result == null || result.Count == 0)
             {
                 return NotFound($"No order found for clientId:{clientId}!");
             }

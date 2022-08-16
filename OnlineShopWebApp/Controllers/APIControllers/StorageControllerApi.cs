@@ -5,7 +5,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StorageControllerApi:ControllerBase
+    public class StorageControllerApi : ControllerBase
     {
         public readonly IStorageRepository _storageRepository;
 
@@ -17,14 +17,14 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         [HttpGet]
         public async Task<IActionResult> CheckAvailability(int productId)
         {
-            if(productId<1)
+            if (productId < 1)
             {
                 return BadRequest("Invalid productId");
             }
 
             var quantity = await _storageRepository.GetQuantityByProductId(productId);
 
-            if(quantity<1)
+            if (quantity == 0)
             {
                 return NotFound($"Product {productId} is not on the stock");
             }
