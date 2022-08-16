@@ -95,7 +95,9 @@ namespace OnlineShopWebApp.Controllers
             }
 
             ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Id");
+
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name");
+
             return View(orderedProduct);
         }
 
@@ -131,7 +133,9 @@ namespace OnlineShopWebApp.Controllers
                     else
                     {
                         ViewData["OrderId"] = new SelectList(_orderRepository.GetAll().Result, "Id", "Id", orderedProduct.Order);
+
                         ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", orderedProduct.Product);
+
                         return View(orderedProduct);
                     }
                 }

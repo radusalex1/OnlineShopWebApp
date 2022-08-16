@@ -76,11 +76,14 @@ namespace OnlineShopWebApp.Controllers
             }
 
             var storage = await _storageRepository.Get(id);
+
             if (storage == null)
             {
                 return NotFound();
             }
+
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", storage.Product);
+
             return View(storage);
         }
 
@@ -112,10 +115,12 @@ namespace OnlineShopWebApp.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["ProductId"] = new SelectList(_productRepository.GetAll().Result, "Id", "Name", storage.Product);
+
             return View(storage);
         }
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -55,7 +55,7 @@ namespace OnlineShopWebAppTests
         }
 
         [Test]
-        public async Task GetClientsShould()
+        public async Task GetClients_ShouldPass_WhenCallingIndexMethod()
         {
             //arrange
             _mockClientRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(_clients));
@@ -129,9 +129,11 @@ namespace OnlineShopWebAppTests
         {
             //arrange
             _mockClientRepository.Setup(m => m.Add(It.IsAny<Client>())).Returns(Task.FromResult(false));
+
             _mockClientRepository.Setup(n => n.IfExists(It.IsAny<string>())).Returns(Task.FromResult(true));
             _mockGenderRepository.Setup(n => n.Get(It.IsAny<int>())).Returns(Task.FromResult(_genders[0]));
             _mockGenderRepository.Setup(n => n.GetAll()).Returns(Task.FromResult(_genders));
+
 
             //act
             var actionResult = await _clientController.Create(_client);

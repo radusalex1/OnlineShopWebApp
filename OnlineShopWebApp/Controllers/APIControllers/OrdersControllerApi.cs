@@ -17,9 +17,9 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         [HttpPut("CancelOrderById")]
         public async Task<IActionResult> CancelOrderById(int orderId)
         {
-            if (orderId < 1)
+            if (orderId < 1 || orderId==null)
             {
-                return BadRequest("Invalid OrderId");
+                return BadRequest("Invalid OrderId!");
             }
 
             var result = await _orderRepository.CancelOrderById(orderId);
@@ -33,14 +33,14 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         }
 
         [HttpPut("UnCancelOrderById")]
-        public async Task<IActionResult> UnCancelOrderById(int orderId)
+        public async Task<IActionResult> UnCancelOrderById(int? orderId)
         {
-            if (orderId < 1)
+            if (orderId < 1 || orderId==null)
             {
-                return BadRequest("Invalid OrderId");
+                return BadRequest("Invalid OrderId!");
             }
 
-            var result = await _orderRepository.CancelOrderById(orderId);
+            var result = await _orderRepository.UnCancelOrderById(orderId);
 
             if (!result)
             {
@@ -53,7 +53,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         [HttpGet("GetClientOrders")]
         public async Task<IActionResult> GetClientOrders(int clientId)
         {
-            if (clientId < 1)
+            if (clientId < 1 || clientId==null)
             {
                 return BadRequest("Invalid clientId");
             }
@@ -62,7 +62,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
 
             if (result == null || result.Count == 0)
             {
-                return NotFound($"No order found for clientId:{clientId}!");
+                return Ok($"No order found for clientId:{clientId}!");
             }
 
             return Ok(result);
@@ -71,7 +71,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         [HttpGet("GetClientNumbersOfOrders")]
         public async Task<IActionResult> GetClientNumberOfOrders(int clientId)
         {
-            if (clientId < 1)
+            if (clientId < 1 || clientId==null)
             {
                 return BadRequest("Invalid clientId");
             }
@@ -80,7 +80,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
 
             if (result == null || result.Count == 0)
             {
-                return NotFound($"No order found for clientId:{clientId}!");
+                return Ok($"No order found for clientId:{clientId}!");
             }
 
             return Ok(result.Count);
@@ -89,7 +89,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         [HttpGet("CheckIfOrderIsCanceled")]
         public async Task<IActionResult> CheckIfOrderIsCanceled(int orderId)
         {
-            if (orderId < 1)
+            if (orderId < 1 || orderId==null)
             {
                 return BadRequest("Invalid orderId");
             }
@@ -98,7 +98,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
 
             if (result == null)
             {
-                return NotFound($"No order found with id:{orderId}!");
+                return Ok($"No order found with id:{orderId}!");
             }
 
             if(result.Canceled)

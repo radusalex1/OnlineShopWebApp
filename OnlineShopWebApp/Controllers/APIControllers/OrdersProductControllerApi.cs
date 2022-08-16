@@ -17,13 +17,19 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         [HttpGet("GetProductsByOrder")]
         public async Task<IActionResult> GetProductsByOrder(int orderId)
         {
-            return Ok(await _ordersProductRepository.GetProductsFromOrder(orderId));
+            if(orderId < 1 || orderId==null)
+            {
+                return BadRequest("Invalid orderId!");
+            }
+
+            var result = await _ordersProductRepository.GetProductsFromOrder(orderId);
+
+            if( result==null || result.Count==0)
+            {
+                return Ok($"No products for orderId:{orderId}!");
+            }
+            return Ok(result);
         }
 
-        [HttpPost("AddProdutsToOrder")]
-        public async Task<IActionResult> AddProductToOrder(int orderId,List<int> produtIds)
-        {
-            return Ok();
-        }
     }
 }
