@@ -116,7 +116,7 @@ namespace OnlineShopWebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!await OrderExists(order.Id))
                     {
                         return NotFound();
                     }
@@ -174,9 +174,9 @@ namespace OnlineShopWebApp.Controllers
         }
 
 
-        private bool OrderExists(int id)
+        private async Task<bool> OrderExists(int id)
         {
-            return _orderRepository.IfExists(id);
+            return await _orderRepository.IfExists(id);
         }
     }
 }

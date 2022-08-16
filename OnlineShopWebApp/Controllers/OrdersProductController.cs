@@ -140,7 +140,7 @@ namespace OnlineShopWebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderedProductExists(orderedProduct.Id))
+                    if (!await OrderedProductExists(orderedProduct.Id))
                     {
                         return NotFound();
                     }
@@ -197,9 +197,9 @@ namespace OnlineShopWebApp.Controllers
         }
 
 
-        private bool OrderedProductExists(int id)
+        private async Task<bool> OrderedProductExists(int id)
         {
-            return _orderProductRepository.IfExists(id);
+            return await _orderProductRepository.IfExists(id);
         }
     }
 }

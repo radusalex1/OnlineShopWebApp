@@ -21,8 +21,7 @@ namespace OnlineShopWebApp.Repositories
         }
 
         public async Task<bool> CancelOrderById(int orderId)
-        {
-           
+        {      
             var order =  await _shopContext.Orders
                .Include(val => val.Client)
                .ThenInclude(c => c.Gender)
@@ -81,9 +80,9 @@ namespace OnlineShopWebApp.Repositories
                 .ToListAsync();
         }
 
-        public bool IfExists(int id)
+        public async Task<bool> IfExists(int id)
         {
-            return _shopContext.Orders.Any(p => p.Id == id);
+            return await _shopContext.Orders.AnyAsync(p => p.Id == id);
         }
 
 

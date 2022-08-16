@@ -14,6 +14,6 @@ namespace OnlineShopWebApp.Repositories
 
         public Task<bool> Update(T objectToUpdate);
 
-        public bool IfExists(int id);
+        public Task<bool> IfExists(int id);
     }
 }
