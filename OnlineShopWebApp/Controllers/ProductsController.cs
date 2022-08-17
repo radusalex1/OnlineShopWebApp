@@ -5,9 +5,6 @@ using OnlineShopWebApp.Repositories;
 
 namespace OnlineShopWebApp.Controllers
 {
-    /// <summary>
-    /// TODO: 2 produse sa nu aiba acelas nume - de refacut.
-    /// </summary>
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
@@ -88,7 +85,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid && await _productRepository.IfExists(product.Name) == false)
+            if (ModelState.IsValid && await _productRepository.IfExists(product.Name,id))
             {
                 try
                 {
