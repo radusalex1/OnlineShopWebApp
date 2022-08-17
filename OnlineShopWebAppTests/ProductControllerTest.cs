@@ -12,8 +12,8 @@ namespace OnlineShopWebAppTests
     public class ProductControllerTest
     {
         private List<Product> _products;
-        private Product nullProduct;
-        List<Product> emptyListOfProducts;
+        private Product? _nullProduct;
+        private List<Product>? _emptyListOfProducts;
         private ProductsController _productsController;
         private Mock<IProductRepository> _mockProductRepository;
 
@@ -29,8 +29,10 @@ namespace OnlineShopWebAppTests
                     Price=200
                 }
             };
-            nullProduct = null;
-            emptyListOfProducts = null;
+
+            _nullProduct = null;
+            _emptyListOfProducts = null;
+
             _mockProductRepository = new Mock<IProductRepository>();
             _productsController = new ProductsController(_mockProductRepository.Object);
         }
@@ -44,7 +46,7 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task IndexMethodTest_ShouldPass_WhenIndexMethodIsCalled()
         {
-            //arrage
+            //arrange
             _mockProductRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(_products));
 
             //act
@@ -85,7 +87,9 @@ namespace OnlineShopWebAppTests
         public async Task GetProduct_ShouldPass_WhenCallingByInvalidId()
         {
             //arrange
-            _mockProductRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(nullProduct));
+
+            _mockProductRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(_nullProduct));
+
 
             //act
             var actionResult = await _productsController.Details(2);
@@ -135,7 +139,7 @@ namespace OnlineShopWebAppTests
         public async Task EditProduct_ShouldPass_WhenCallingByInvalidId()
         {
             //arrange
-            _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(nullProduct));
+            _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(_nullProduct));
 
             //act
             var actionResult = await _productsController.Edit(2);
@@ -178,7 +182,9 @@ namespace OnlineShopWebAppTests
             _products[0].Id = 2;
 
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Throws<DbUpdateConcurrencyException>();
-            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+
+            _mockProductRepository.Setup(m => m.CanUpdate(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+
             //act
             var actionResult = await _productsController.Edit(2, _products[0]);
 
@@ -194,6 +200,7 @@ namespace OnlineShopWebAppTests
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Throws<DbUpdateConcurrencyException>();
             _mockProductRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
             _mockProductRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
+            _mockProductRepository.Setup(m => m.CanUpdate(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //assert
             Assert.That(async () => await _productsController.Edit(1, _products[0]), Throws.TypeOf<DbUpdateConcurrencyException>());
@@ -204,7 +211,8 @@ namespace OnlineShopWebAppTests
         {
             //arrange
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Returns(Task.FromResult(true));
-            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+
+            _mockProductRepository.Setup(m => m.CanUpdate(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
             var actionResult = await _productsController.Edit(1, _products[0]);
@@ -229,9 +237,8 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task DeleteProductPage_ShouldPass_WhenPassingInvalidId()
         {
-
             //arrange
-            _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(nullProduct));
+            _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(_nullProduct));
 
             //act
             var actionResult = await _productsController.Delete(2);
@@ -244,7 +251,7 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task DeleteProductPage_ShouldPass_WhenPassingValidId()
         {
-            //arrange 
+            //arrange
             _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(_products[0]));
 
             //act
@@ -259,7 +266,7 @@ namespace OnlineShopWebAppTests
         public async Task DeleteProductPage_ShouldPass_WhenThereAreNoProducts()
         {
             //arrange
-            _mockProductRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(emptyListOfProducts));
+            _mockProductRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(_emptyListOfProducts));
 
             //act
             var actionResult = await _productsController.DeleteConfirmed(1);
@@ -271,8 +278,7 @@ namespace OnlineShopWebAppTests
 
         [Test]
         public async Task DeleteProduct_ShouldPass_WhenDeletingValidProduct()
-        {
-           
+        {         
             //arrange
             _mockProductRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(_products));
 
@@ -296,7 +302,6 @@ namespace OnlineShopWebAppTests
             //assert
             Assert.That(actionResult, Is.EqualTo(true));
         }
-
 
         [Test]
         public async Task ProductExists_ShoudPass_WhenThereAreNoDuplicates()
