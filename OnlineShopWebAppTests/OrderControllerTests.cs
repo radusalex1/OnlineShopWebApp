@@ -141,7 +141,6 @@ namespace OnlineShopWebAppTests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.That(actionResult, Is.InstanceOf<RedirectToActionResult>());
-
         }
 
         [Test]
