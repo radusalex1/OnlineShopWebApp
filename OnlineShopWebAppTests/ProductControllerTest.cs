@@ -87,7 +87,9 @@ namespace OnlineShopWebAppTests
         public async Task GetProduct_ShouldPass_WhenCallingByInvalidId()
         {
             //arrange
+
             _mockProductRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(_nullProduct));
+
 
             //act
             var actionResult = await _productsController.Details(2);
@@ -180,6 +182,7 @@ namespace OnlineShopWebAppTests
             _products[0].Id = 2;
 
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Throws<DbUpdateConcurrencyException>();
+
             _mockProductRepository.Setup(m => m.CanUpdate(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
@@ -195,6 +198,7 @@ namespace OnlineShopWebAppTests
         {
             //arrange
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Throws<DbUpdateConcurrencyException>();
+            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
             _mockProductRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
             _mockProductRepository.Setup(m => m.CanUpdate(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
@@ -207,6 +211,7 @@ namespace OnlineShopWebAppTests
         {
             //arrange
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Returns(Task.FromResult(true));
+
             _mockProductRepository.Setup(m => m.CanUpdate(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
@@ -220,6 +225,7 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task DeleteProductPage_ShouldPass_WhenPassingNullId()
         {
+
             //act
             var actionResult = await _productsController.Delete(null);
 
@@ -245,7 +251,7 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task DeleteProductPage_ShouldPass_WhenPassingValidId()
         {
-            //arrange        
+            //arrange
             _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(_products[0]));
 
             //act
