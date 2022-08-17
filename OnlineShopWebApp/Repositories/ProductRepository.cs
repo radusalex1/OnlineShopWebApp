@@ -58,6 +58,20 @@ namespace OnlineShopWebApp.Repositories
             return await _shopContext.Products.AnyAsync(p => p.Name == productName);
         }
 
+        public async Task<bool> IfExists(string productName, int id)
+        {
+            var product = await _shopContext.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Name == productName);
+            if(product == null)
+            {
+                return true;
+            }
+            if(product.Id == id)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> Update(Product objectToUpdate)
         {
             _shopContext.Products.Update(objectToUpdate);

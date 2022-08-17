@@ -15,7 +15,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         }
 
         [HttpPut("CancelOrderById")]
-        public async Task<IActionResult> CancelOrderById(int orderId)
+        public async Task<IActionResult> CancelOrderById(int? orderId)
         {
             if (orderId < 1 || orderId==null)
             {
@@ -51,7 +51,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         }
 
         [HttpGet("GetClientOrders")]
-        public async Task<IActionResult> GetClientOrders(int clientId)
+        public async Task<IActionResult> GetClientOrders(int? clientId)
         {
             if (clientId < 1 || clientId==null)
             {
@@ -69,7 +69,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         }
 
         [HttpGet("GetClientNumbersOfOrders")]
-        public async Task<IActionResult> GetClientNumberOfOrders(int clientId)
+        public async Task<IActionResult> GetClientNumberOfOrders(int? clientId)
         {
             if (clientId < 1 || clientId==null)
             {
@@ -87,7 +87,7 @@ namespace OnlineShopWebApp.Controllers.APIControllers
         }
 
         [HttpGet("CheckIfOrderIsCanceled")]
-        public async Task<IActionResult> CheckIfOrderIsCanceled(int orderId)
+        public async Task<IActionResult> CheckIfOrderIsCanceled(int? orderId)
         {
             if (orderId < 1 || orderId==null)
             {
