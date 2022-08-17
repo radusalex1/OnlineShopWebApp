@@ -84,15 +84,15 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task GetProduct_ShouldPass_WhenCallingByInvalidId()
         {
-          
-
+            //arrange
             _mockProductRepository.Setup(m => m.Get(It.IsAny<int>())).Returns(Task.FromResult(nullProduct));
 
+            //act
             var actionResult = await _productsController.Details(2);
 
+            //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.That(actionResult, Is.InstanceOf<NotFoundResult>());
-
         }
 
         [Test]
@@ -178,7 +178,7 @@ namespace OnlineShopWebAppTests
             _products[0].Id = 2;
 
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Throws<DbUpdateConcurrencyException>();
-
+            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
             //act
             var actionResult = await _productsController.Edit(2, _products[0]);
 
@@ -190,10 +190,9 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task EditProductPost_ShouldPass_WhenThrowException()
         {
-            
-           
             //arrange
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Throws<DbUpdateConcurrencyException>();
+            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
             _mockProductRepository.Setup(m => m.IfExists(It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //assert
@@ -205,6 +204,7 @@ namespace OnlineShopWebAppTests
         {
             //arrange
             _mockProductRepository.Setup(m => m.Update(It.IsAny<Product>())).Returns(Task.FromResult(true));
+            _mockProductRepository.Setup(m => m.IfExists(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             //act
             var actionResult = await _productsController.Edit(1, _products[0]);
@@ -217,6 +217,7 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task DeleteProductPage_ShouldPass_WhenPassingNullId()
         {
+
             //act
             var actionResult = await _productsController.Delete(null);
 
@@ -243,7 +244,7 @@ namespace OnlineShopWebAppTests
         [Test]
         public async Task DeleteProductPage_ShouldPass_WhenPassingValidId()
         {
-          
+            //arrange 
             _mockProductRepository.Setup(m => m.Get(It.IsAny<int?>())).Returns(Task.FromResult(_products[0]));
 
             //act

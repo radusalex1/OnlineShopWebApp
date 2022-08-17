@@ -148,7 +148,6 @@ namespace OnlineShopWebAppTests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.That(actionResult, Is.InstanceOf<RedirectToActionResult>());
-
         }
 
         [Test]
@@ -167,8 +166,6 @@ namespace OnlineShopWebAppTests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.That(actionResult, Is.InstanceOf<RedirectToActionResult>());
-
-
         }
 
         [Test]
@@ -238,7 +235,5 @@ namespace OnlineShopWebAppTests
             Assert.That(actionResult, Is.Not.Null);
             Assert.That(actionResult, Is.InstanceOf<RedirectToActionResult>());
         }
-
-        
     }
 }
