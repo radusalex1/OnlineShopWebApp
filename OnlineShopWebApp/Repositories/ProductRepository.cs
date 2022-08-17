@@ -18,7 +18,6 @@ namespace OnlineShopWebApp.Repositories
             return true;
         }
 
-
         public async Task<bool> Delete(int? id)
         {
             var product = await _shopContext.Products.FindAsync(id);
@@ -35,18 +34,15 @@ namespace OnlineShopWebApp.Repositories
             return true;
         }
 
-
         public async Task<Product?> Get(int? id)
         {
             return await _shopContext.Products.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-
         public async Task<List<Product>> GetAll()
         {
             return await _shopContext.Products.ToListAsync();
         }
-
 
         public async Task<bool> IfExists(int id)
         {
@@ -58,9 +54,10 @@ namespace OnlineShopWebApp.Repositories
             return await _shopContext.Products.AnyAsync(p => p.Name == productName);
         }
 
-        public async Task<bool> IfExists(string productName, int id)
+        public async Task<bool> CanUpdate(string productName, int id)
         {
             var product = await _shopContext.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Name == productName);
+
             if(product == null)
             {
                 return true;

@@ -302,7 +302,7 @@ namespace OnlineShopWebAppTests
         public async Task DeleteClient_ShouldPass_WhenThereAreNoClients()
         {
             //arrange
-            List<Client> clients = null;
+            List<Client>? clients = null;
 
             _mockClientRepository.Setup(m => m.GetAll()).Returns(Task.FromResult(clients));
 
