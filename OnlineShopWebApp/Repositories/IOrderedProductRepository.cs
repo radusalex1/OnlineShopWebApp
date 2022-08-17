@@ -2,9 +2,6 @@
 
 namespace OnlineShopWebApp.Repositories
 {
-    /// <summary>
-    /// TODO: maybe change theese names.
-    /// </summary>
     public interface IOrderedProductRepository : IBaseOperations<OrderedProduct>
     {
         /// <summary>

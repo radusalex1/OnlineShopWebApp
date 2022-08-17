@@ -57,7 +57,9 @@ namespace OnlineShopWebApp.Repositories
 
         public async Task<bool> IfExists(string phoneNumber, int id)
         {
-            var result = await _shopContext.Clients.AsNoTracking().FirstOrDefaultAsync(var => var.PhoneNumber == phoneNumber);
+            var result = await _shopContext.Clients
+                .AsNoTracking()
+                .FirstOrDefaultAsync(var => var.PhoneNumber == phoneNumber);
 
             if (result == null)
                 return true;

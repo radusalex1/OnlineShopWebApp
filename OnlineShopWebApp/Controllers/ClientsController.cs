@@ -11,20 +11,17 @@ namespace OnlineShopWebApp.Controllers
         private readonly IClientRepository _clientRepository;
         private readonly IGenderRepository _genderRepository;
 
-
         public ClientsController(IClientRepository clientRepository, IGenderRepository genderRepository)
         {
             _clientRepository = clientRepository;
             _genderRepository = genderRepository;
         }
 
-
         // GET: Clients
         public async Task<IActionResult> Index()
         {
             return View(await _clientRepository.GetAll());
         }
-
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -44,14 +41,12 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
-
         // GET: Clients/Create
         public IActionResult Create()
         {
             ViewData["GenderId"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType");
             return View();
         }
-
 
         // POST: Clients/Create
         [HttpPost]
@@ -72,7 +67,6 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
-
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -91,7 +85,6 @@ namespace OnlineShopWebApp.Controllers
             ViewData["GenderType"] = new SelectList(_genderRepository.GetAll().Result, "Id", "GenderType", client.Gender);
             return View(client);
         }
-
 
         // POST: Clients/Edit/5
         [HttpPost]
@@ -147,7 +140,6 @@ namespace OnlineShopWebApp.Controllers
             return View(client);
         }
 
-
         // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -166,7 +158,6 @@ namespace OnlineShopWebApp.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
 
         public async Task<bool> ClientExists(int id)
         {
