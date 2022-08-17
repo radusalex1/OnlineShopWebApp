@@ -85,7 +85,7 @@ namespace OnlineShopWebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid && await _productRepository.IfExists(product.Name,id))
+            if (ModelState.IsValid && await _productRepository.CanUpdate(product.Name, id))
             {
                 try
                 {

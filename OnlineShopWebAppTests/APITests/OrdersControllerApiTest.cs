@@ -35,13 +35,12 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
-            Assert.AreEqual($"Invalid OrderId!", (actionResult as BadRequestObjectResult).Value);
+            Assert.That((actionResult as BadRequestObjectResult).Value, Is.EqualTo($"Invalid OrderId!"));
         }
 
         [Test]
         public async Task CancelOrderById_ShoundPass_WhenCallingByUnexsitingId()
         {
-
             //arrange
             _mockOrderRepository.Setup(m => m.CancelOrderById(It.IsAny<int>())).Returns(Task.FromResult(false));
 
@@ -51,7 +50,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<NotFoundObjectResult>(actionResult);
-            Assert.AreEqual($"Order not found!", (actionResult as NotFoundObjectResult).Value);
+            Assert.That((actionResult as NotFoundObjectResult).Value, Is.EqualTo($"Order not found!"));
         }
 
         [Test]
@@ -67,7 +66,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual($"The order {1} was canceled successfully!", (actionResult as OkObjectResult).Value);
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo($"The order {1} was canceled successfully!"));
         }
 
         [Test]
@@ -79,7 +78,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
-            Assert.AreEqual($"Invalid OrderId!", (actionResult as BadRequestObjectResult).Value);
+            Assert.That((actionResult as BadRequestObjectResult).Value, Is.EqualTo($"Invalid OrderId!"));
         }
 
         [Test]
@@ -94,13 +93,12 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<NotFoundObjectResult>(actionResult);
-            Assert.AreEqual($"Order not found!", (actionResult as NotFoundObjectResult).Value);
+            Assert.That((actionResult as NotFoundObjectResult).Value, Is.EqualTo($"Order not found!"));
         }
 
         [Test]
         public async Task UnCancelOrderById_ShouldPass_WhenCallingByValidId()
         {
-
             //arrange
             _mockOrderRepository.Setup(m => m.UnCancelOrderById(It.IsAny<int>())).Returns(Task.FromResult(true));
 
@@ -110,7 +108,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual($"The order {1} was canceled successfully!", (actionResult as OkObjectResult).Value);
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo($"The order {1} was canceled successfully!"));
         }
 
         [Test]
@@ -122,7 +120,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
-            Assert.AreEqual("Invalid clientId", (actionResult as BadRequestObjectResult).Value);
+            Assert.That((actionResult as BadRequestObjectResult).Value, Is.EqualTo("Invalid clientId"));
         }
 
         [Test]
@@ -139,7 +137,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual($"No order found for clientId:{1}!", (actionResult as OkObjectResult).Value);
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo($"No order found for clientId:{1}!"));
         }
 
         [Test]
@@ -163,7 +161,6 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-
         }
 
         [Test]
@@ -175,7 +172,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
-            Assert.AreEqual("Invalid clientId", (actionResult as BadRequestObjectResult).Value);
+            Assert.That((actionResult as BadRequestObjectResult).Value, Is.EqualTo("Invalid clientId"));
         }
 
         [Test]
@@ -192,7 +189,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual($"No order found for clientId:{1}!", (actionResult as OkObjectResult).Value);
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo($"No order found for clientId:{1}!"));
         }
 
         [Test]
@@ -217,7 +214,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual(1, (actionResult as OkObjectResult).Value);
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo(1));
         }
 
         [Test]
@@ -229,13 +226,12 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
-            Assert.AreEqual("Invalid orderId", (actionResult as BadRequestObjectResult).Value);
+            Assert.That((actionResult as BadRequestObjectResult).Value, Is.EqualTo("Invalid orderId"));
         }
 
         [Test]
         public async Task CheckIfOrderIsCanceled_ShouldPass_WhenCallingByUnexsistingId()
         {
-
             //arrange
             Order order = null;
 
@@ -247,7 +243,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual($"No order found with id:{1}!", (actionResult as OkObjectResult).Value);
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo($"No order found with id:{1}!"));
         }
 
         [Test]
@@ -270,7 +266,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual("The order is canceled", (actionResult as OkObjectResult).Value);
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo("The order is canceled"));
         }
 
         [Test]
@@ -293,8 +289,7 @@ namespace OnlineShopWebAppTests.APITests
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual("The order is not canceled", (actionResult as OkObjectResult).Value);
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo("The order is not canceled"));
         }
     }
-
 }

@@ -12,11 +12,11 @@ namespace OnlineShopWebApp.Repositories
         public Task<bool> IfExists(string productName);
 
         /// <summary>
-        /// In case you edit the same current object.
+        /// In case you edit the product and the name already exists.
         /// </summary>
         /// <param name="productName"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<bool> IfExists(string productName, int id);
+        public Task<bool> CanUpdate(string productName, int id);
     }
 }

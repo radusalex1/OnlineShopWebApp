@@ -29,14 +29,13 @@ namespace OnlineShopWebAppTests.APITests
         [Test]
         public async Task GetProductsByOrder_ShouldPass_WhenCallingByInvalidId()
         {
-
             //act
             var actionResult = await _ordersProductControllerApi.GetProductsByOrder(0);
 
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<BadRequestObjectResult>(actionResult);
-            Assert.AreEqual("Invalid orderId!", (actionResult as BadRequestObjectResult).Value);
+            Assert.That((actionResult as BadRequestObjectResult).Value, Is.EqualTo("Invalid orderId!"));
         }
 
         [Test]
@@ -50,12 +49,10 @@ namespace OnlineShopWebAppTests.APITests
             //act
             var actionResult = await _ordersProductControllerApi.GetProductsByOrder(1);
 
-
             //assert
             Assert.That(actionResult, Is.Not.Null);
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
-            Assert.AreEqual($"No products for orderId:{1}!", (actionResult as OkObjectResult).Value);
-
+            Assert.That((actionResult as OkObjectResult).Value, Is.EqualTo($"No products for orderId:{1}!"));
         }
 
         [Test]
